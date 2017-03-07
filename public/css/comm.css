@@ -68,9 +68,15 @@ body{font-family:"Helvetica Neue","Luxi Sans","DejaVu Sans",Tahoma,"Hiragino San
 .sidebar-menu .list-group-item .menu-sub .active .side-text{color:#fff;}
 .sidebar-menu .list-group-item a:after{position:absolute;right:10px;top:13px;content:"\e258";display:inline-block;font-family:'Glyphicons Halflings';font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-size:12px;}
 .sidebar-menu .list-group-item.menu-toggle-open > a:after{content:"\e259";}
+.vFramework-body.vFramework-mini .sidebar-menu .list-group-item a:after{display: none;}
+
 .sidebar-menu .list-group-item.menu-toggle-open .sidebar-menu{display: block;}
 .vFramework-body.vFramework-mini .sidebar-menu .list-group .list-group-item a{width:50px;padding-left:0;text-align:center;}
 .portal-option{height:40px;background:#eeeeee;}
+
+.navbar-header{float: left;}
+.navbar-right{float: right;}
+.channel-title{border-bottom: 1px solid #e0e0e0;padding: 15px;margin: 0 15px 10px;}
 
 /* login style */
 /* .pace-done{background-color:#e0e5eb;}

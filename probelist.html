@@ -19,7 +19,7 @@
 		    		<div class="loginafter">
 		    			<img class="img-circle" src="http://img.zcool.cn/community/0493e3553fb94a0000014027d94d42.jpg">
 		    			<div class="btn-group user-dropdown">
-		    				<a data-toggle="dropdown" aria-expanded="false">portaladmin<span class="caret"></span></a>		    	
+		    				<a data-toggle="dropdown" aria-expanded="false">个人中心<span class="caret"></span></a>
 		    				<ul class="dropdown-menu">
 		    					<li><a href="/userbills">月结账单下载</a></li>
 		    					<li role="separator"></li><li><a href="/login">登出</a></li>
@@ -31,10 +31,9 @@
 		</div>
 
 		<div class="vFramework-body vFramework-full"> <!-- vFramework-mini-->
-
 			<div class="vFramework-sidebar">			
 				<div class="sidebar-fold">
-					<button type="button" class="sidebar-toggle">
+				<button type="button" class="sidebar-toggle">
 			            <span class="icon-bar"></span>
 			            <span class="icon-bar"></span>
 			            <span class="icon-bar"></span>
@@ -43,7 +42,7 @@
 
 				<div class="sidebar-menu">
 					<ul class="list-group">
-						<li class="list-group-item "><a href="#"><div class="icon-wp"><i class="icon-side icon-chartUp"></i></div><span class="side-text">探针列表</span></a></li>
+						<li class="list-group-item active"><a href="#"><div class="icon-wp"><i class="icon-side icon-chartUp"></i></div><span class="side-text">探针列表</span></a></li>
 						<li class="list-group-item"><a href="#"><div class="icon-wp"><i class="icon-side icon-chart"></i></div><span class="side-text">任务列表</span></a></li>
 						<li class="list-group-item"><a href="#"><div class="icon-wp"><i class="icon-side icon-help"></i></div><span class="side-text">探针报表分析</span></a></li>
 					</ul>
@@ -51,11 +50,14 @@
 			</div>
 
 			<div class="vFramework-container">
-				<div class="text-center">
-					<div class="portal-option"><button class="btn btn-primary">带宽分析（点击打开参数面板）</button></div>					
-				</div>
+				<h4 class="channel-title">探针列表</h4>
 				<div class="vFramework">
-					展示区域
+					<div class="input-group">
+				      <input type="text" class="form-control" placeholder="Search for...">
+				      <span class="input-group-btn">
+				        <button class="btn btn-default" type="button">Go!</button>
+				      </span>
+				    </div><!-- /input-group -->
 				</div>
 			</div>
 		</div>

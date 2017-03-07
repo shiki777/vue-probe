@@ -2,9 +2,72 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>probe</title>
+	<title>probe统一框架皮肤配色</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="public/libs/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="public/css/comm.css">
 </head>
 <body>
-	probe test
+	<div class="v-framework">
+		<div class="navbar navbar-default navbar-fixed-top vFramework-topbar">
+			<div class="container-fluid">
+				<div class="navbar-header">
+			      <a class="navbar-brand" href="#">Probe</a><p class="navbar-text">V0.0.1</p>
+			    </div>
+		        
+		        <div class="nav navbar-nav navbar-right">		    			
+		    		<div class="loginafter">
+		    			<img class="img-circle" src="http://img.zcool.cn/community/0493e3553fb94a0000014027d94d42.jpg">
+		    			<div class="btn-group user-dropdown">
+		    				<a data-toggle="dropdown" aria-expanded="false">portaladmin<span class="caret"></span></a>		    	
+		    				<ul class="dropdown-menu">
+		    					<li><a href="/userbills">月结账单下载</a></li>
+		    					<li role="separator"></li><li><a href="/login">登出</a></li>
+		    				</ul>
+		    			</div>
+		    		</div>
+		    	</div>
+			</div>
+		</div>
+
+		<div class="vFramework-body vFramework-full"> <!-- vFramework-mini-->
+
+			<div class="vFramework-sidebar">			
+				<div class="sidebar-fold">
+					<button type="button" class="sidebar-toggle">
+			            <span class="icon-bar"></span>
+			            <span class="icon-bar"></span>
+			            <span class="icon-bar"></span>
+			        </button>
+				</div>
+
+				<div class="sidebar-menu">
+					<ul class="list-group">
+						<li class="list-group-item "><a href="#"><div class="icon-wp"><i class="icon-side icon-chartUp"></i></div><span class="side-text">探针列表</span></a></li>
+						<li class="list-group-item"><a href="#"><div class="icon-wp"><i class="icon-side icon-chart"></i></div><span class="side-text">任务列表</span></a></li>
+						<li class="list-group-item"><a href="#"><div class="icon-wp"><i class="icon-side icon-help"></i></div><span class="side-text">探针报表分析</span></a></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="vFramework-container">
+				<div class="text-center">
+					<div class="portal-option"><button class="btn btn-primary">带宽分析（点击打开参数面板）</button></div>					
+				</div>
+				<div class="vFramework">
+					展示区域
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="public/libs/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="public/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			$('.sidebar-toggle').click(function(event) {
+				$('.vFramework-body').toggleClass('vFramework-full vFramework-mini');
+			});
+		})
+	</script>
 </body>
 </html>

@@ -97,11 +97,12 @@ function obtain(n){
 }
 
 var urls = {
-  probeUrl : "http://192.168.5.233:8084/probe/rest/probeTask/query.do",
-  taskUrl : "http://192.168.5.233:8084/probe/rest/taskList/query.do",
-  historyTaskUrl : "http://192.168.5.233:8084/probe/rest/historyTaskList/query.do",
-  loginUrl : "http://192.168.5.233:8084/probe/rest/login/query.do",
-  logoutUrl : "http://192.168.5.233:8084/probe/rest/logout/query.do"
+  base : 'http://192.168.5.233:8084',
+  probeUrl : this.base + '/probe/rest/probeTask/query.do',
+  taskUrl : this.base + '/probe/rest/taskList/query.do',
+  historyTaskUrl : this.base + '/probe/rest/historyTaskList/query.do',
+  loginUrl : this.base + '/probe/rest/login/query.do',
+  logoutUrl : this.base +  '/probe/rest/logout/query.do'
 }
 
 // 登录管理

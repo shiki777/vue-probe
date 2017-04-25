@@ -96,17 +96,17 @@ function obtain(n){
   })
 }
 
+var baseUrl = 'http://10.220.10.60:8080';
 var urls = {
-  base : 'http://192.168.5.233:8084',
-  probeUrl : this.base + '/probe/rest/probeTask/query.do',
-  taskUrl : this.base + '/probe/rest/taskList/query.do',
-  historyTaskUrl : this.base + '/probe/rest/historyTaskList/query.do',
-  loginUrl : this.base + '/probe/rest/login/query.do',
-  logoutUrl : this.base +  '/probe/rest/logout/query.do'
+  probeUrl : baseUrl + '/probe/rest/probeTask/query.do',
+  taskUrl : baseUrl + '/probe/rest/taskList/query.do',
+  historyTaskUrl : baseUrl + '/probe/rest/historyTaskList/query.do',
+  loginUrl : baseUrl + '/probe/rest/login/query.do',
+  logoutUrl : baseUrl +  '/probe/rest/logout/query.do'
 }
-
 // 登录管理
 var loginManage = {
+
   login:function(){
       var reqData={
         "userName":$('#un_1').val(),

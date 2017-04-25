@@ -124,6 +124,9 @@ var loginManage = {
         expiresDate.setTime(expiresDate.getTime() + (10*60*1000));
         if(res.status==0){
           usecookies.setCookie("isLogin",true,expiresDate);
+          if(location.href.match(/login/)){
+            location.href = '/probe/index/index.html';
+          }
           history.go(-1);
         }
       });
@@ -133,14 +136,14 @@ var loginManage = {
       console.log(res)
       if(res.status==0){
         usecookies.delCookie("isLogin");
-        window.location.href = "/probe/login.html";
+        window.location.href = "/probe/login/login.html";
       }
     });
   },
   chack:function(){
     var hosturl = window.location.href.indexOf("login");
     if($.cookie("isLogin") == null || usecookies.getCookie("isLogin")==false && hosturl==-1) {
-        window.location.href = "/probe/login.html";
+        window.location.href = "/probe/login/login.html";
         return;
     }  
   }

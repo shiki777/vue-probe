@@ -139,7 +139,6 @@
       obj.on('click', 'li', function(){
         var $this = $(this);
         var pageshow = parseInt($this.find('a').html());
-        console.log(pageshow);
         if (pageshow==1) {
           $(".prv,.first").hide();
           $(".next,.last").show();

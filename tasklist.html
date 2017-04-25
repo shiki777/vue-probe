@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>probe 任务列表</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="public/img/favicon.ico">
 	<link rel="stylesheet" href="public/libs/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="public/css/comm.css">
 </head>
@@ -17,13 +18,16 @@
 		    		<div class="loginafter">
 		    			<img class="img-circle" src="http://img.zcool.cn/community/0493e3553fb94a0000014027d94d42.jpg">
 		    			<div class="btn-group user-dropdown">
-		    				<a data-toggle="dropdown" aria-expanded="false">个人中心<span class="caret"></span></a>
-		    				<ul class="dropdown-menu">
+		    				<a data-toggle="dropdown" aria-expanded="false">个人中心<!-- <span class="caret"></span> --></a>
+<!-- 		    				<ul class="dropdown-menu">
 		    					<li><a href="#">下拉选项</a></li>
 		    					<li><a href="#">版本信息</a></li>
-		    					<li role="separator"></li><li><a href="/login">退出</a></li>
-		    				</ul>
+		    					<li role="separator"></li>
+		    					<li></li>
+		    				</ul> -->
 		    			</div>
+		    			&nbsp;
+		    			<a href="javascript:loginManage.logout();">退出</a>
 		    		</div>
 		    	</div>
 			</div>
@@ -42,7 +46,7 @@
 
 				<div class="sidebar-menu">
 					<ul class="list-group">
-						<li class="list-group-item"><a href="probelist.html"><div class="icon-wp"><i class="icon-side icon-chart1"></i></div><span class="side-text">探针列表</span></a></li>
+						<li class="list-group-item"><a href="index.html"><div class="icon-wp"><i class="icon-side icon-chart1"></i></div><span class="side-text">探针列表</span></a></li>
 						<li class="list-group-item active"><a href="tasklist.html"><div class="icon-wp"><i class="icon-side icon-chart2"></i></div><span class="side-text">任务列表</span></a></li>
 						<li class="list-group-item"><a href="javascript:void(0);"><div class="icon-wp"><i class="icon-side icon-chart3"></i></div><span class="side-text">探针报表分析</span></a></li>
 					</ul>				
@@ -138,15 +142,6 @@
 								<h4 class="channel-title">新建任务</h4>
 								<div class="creattaskwrap">
 									<form class="form-horizontal">
-										<div class="col-sm-offset-2">
-											<label class="radio-inline">
-											  <input type="radio" name="option" id="inlineRadio1" value="option1" checked>配置
-											</label>
-											<label class="radio-inline">
-											  <input type="radio" name="option" id="inlineRadio2" value="option2">自己编写
-											</label>
-
-										</div>
 										<br>
 										<div class="form-group">
 										    <label for="f_taskName" class="col-sm-2 control-label">任务名</label>
@@ -161,13 +156,11 @@
 										      	<option value="">选择任务类型</option>
 										      	<option value="hls" label="hls">hls</option>
 										      	<option value="flv" label="flv">flv</option>
-										      	<option value="ping" label="ping">ping</option>
 										      	<option value="rtmp" label="rtmp">rtmp</option>
-										      	<option value="traceroute" label="traceroute">traceroute</option>
+										      	<option value="ping" label="ping">ping</option>
 										      </select>
 										    </div>
 										</div>
-
 
 										<div class="form-group">
 										    <label for="f_taskPing" class="col-sm-2 control-label">ping持续时间</label>
@@ -215,7 +208,8 @@
 										<br>
 										<div class="col-sm-offset-2">
 											<button class="btn btn-primary" id="J_btn_newTask">确定</button>
-											<button class="btn btn-primary" type="reset" id="J_btn_cancel">取消</button>
+											<button class="btn btn-primary" type="reset">下一步</button>
+											<!-- <button class="btn btn-primary" type="reset" id="J_btn_cancel">取消</button> -->
 										</div>
 									</form>
 								</div>
@@ -229,79 +223,17 @@
 	</div>
 	<script type="text/javascript" src="public/libs/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="public/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="public/js/jquery.cookie.js"></script>
 	<script type="text/javascript" src="public/js/jquery.page.js"></script>
 	<script type="text/javascript" src="public/js/template.js"></script>
-	<!-- <script type="text/javascript" src="public/libs/vue/dist/vue.js"></script> -->
+	<script type="text/javascript" src="public/js/multiselect.min.js"></script>
 	<script type="text/javascript" src="public/js/comm.js"></script>
+	<script type="text/javascript" src="public/js/tasklist.js"></script>
 	<script type="text/javascript">
-	   var requesturl = "http://192.168.5.233:8084/probe/rest/taskList/query.do";
-	   var historyTaskListUrl = "http://192.168.5.233:8084/probe/rest/historyTaskList/query.do";
-	   var localdata = "test.php";	  
-	   $(function(){
-		   
-	   		function tabshow(ta){
-	   			tadkTab.removeClass('active');
-	   			ta.addClass('active');
-	   		}
-		    function obtain(){
-   		   		// var requesturl = "test.php";
-   		   		$('#J_searchBtn').data('searchkey',requesturl);   		   		
-   		   	   	$('#datas').getdatas({
-   		   	   		url:requesturl,
-   		   	   		datatype:2
-   		   	   	})
-   		    }
-   		    obtain();
-
-		   	var tadkTab =  $('#J_task_tab li');
-		   	var flag = true;//第一次请求已完成数据开关
-		   	var haveHistory = true;
-
-		    $('.nowTask').on('click',function(){
-		   		tabshow($(this));
-		   		$('#J_searchBtn').data('searchkey',requesturl);
-		   		$('#datas,.newtaskbtngroup,#page').show();
-		   		$('#datasHistory,#hispage').hide();
-		   		$('.datatips').remove()
-		    })
-
-		    $('.historyTask').on('click',function(){
-		   		$('#datas,.newtaskbtngroup,#page').hide();
-		   		$('#J_searchBtn').data('searchkey',historyTaskListUrl);
-		   		tabshow($(this));
-		   		$('.datatips').remove()
-		   		if(flag){			
-		   			$('#datasHistory').getdatas({
-		   				url:historyTaskListUrl,
-		   				datatype:2,
-		   				pagedome:$('#hispage'),
-		   				callBack:function(isget){
-		   					haveHistory = isget;
-		   					if(!isget){		   						
-		   						$('#hispage').hide();
-		   					}
-		   				}
-		   			})
-		   			flag = false;
-		   		}else{
-		   			if(haveHistory){
-		   				$('#datasHistory,#hispage').show();	
-		   			}		   			
-		   		}
-		    })
-
-		   
-
-
-		   // 新建任务
-			$("#J_newCreatTask").click(function() {		
-				$("#creatTask").show();
-			});
-
-			$('#J_btn_cancel').click(function(event) {
-				$("#creatTask").hide();
-			});
-	   })
+		$(function(){
+			loginManage.chack();
+			// group.cInit();
+		})
 	</script>
 </body>
 </html>

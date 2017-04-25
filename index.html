@@ -4,11 +4,9 @@
 	<meta charset="UTF-8">
 	<title>probe列表</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="public/img/favicon.ico">
 	<link rel="stylesheet" href="public/libs/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="public/css/comm.css">
-	<style type="text/css">
-		
-	</style>
 </head>
 <body>
 	<div class="v-framework">
@@ -20,20 +18,22 @@
 		    		<div class="loginafter">
 		    			<img class="img-circle" src="http://img.zcool.cn/community/0493e3553fb94a0000014027d94d42.jpg">
 		    			<div class="btn-group user-dropdown">
-		    				<a data-toggle="dropdown" aria-expanded="false">个人中心<span class="caret"></span></a>
-		    				<ul class="dropdown-menu">
+		    				<a data-toggle="dropdown" aria-expanded="false">个人中心<!-- <span class="caret"></span> --></a>
+<!-- 		    				<ul class="dropdown-menu">
 		    					<li><a href="#">下拉选项</a></li>
 		    					<li><a href="#">版本信息</a></li>
-		    					<li role="separator"></li><li><a href="/login">退出</a></li>
-		    				</ul>
+		    					<li role="separator"></li>
+		    					<li></li>
+		    				</ul> -->
 		    			</div>
+		    			&nbsp;
+		    			<a href="javascript:loginManage.logout();">退出</a>
 		    		</div>
 		    	</div>
 			</div>
 		</div>
 
 		<div class="vFramework-body vFramework-full"> <!-- vFramework-mini-->
-
 			<div class="vFramework-sidebar">			
 				<div class="sidebar-fold">
 					<button type="button" class="sidebar-toggle">
@@ -45,7 +45,7 @@
 
 				<div class="sidebar-menu">
 					<ul class="list-group">
-						<li class="list-group-item active"><a href="probelist.html"><div class="icon-wp"><i class="icon-side icon-chart1"></i></div><span class="side-text">探针列表</span></a></li>
+						<li class="list-group-item active"><a href="index.html"><div class="icon-wp"><i class="icon-side icon-chart1"></i></div><span class="side-text">探针列表</span></a></li>
 						<li class="list-group-item"><a href="tasklist.html"><div class="icon-wp"><i class="icon-side icon-chart2"></i></div><span class="side-text">任务列表</span></a></li>
 						<li class="list-group-item"><a href="javascript:void(0);"><div class="icon-wp"><i class="icon-side icon-chart3"></i></div><span class="side-text">探针报表分析</span></a></li>
 					</ul>				
@@ -83,20 +83,31 @@
 						        </span>
 						    </div><!-- /input-group -->
 
-						    <div class="btn-group" role="group"><button type="button" id="refreshList" class="btn btn-primary">刷新列表</button></div>						
+						    <div class="btn-group" role="group"><button type="button" id="refreshList" class="btn btn-primary" onclick="obtain(0);">刷新列表</button></div>						
 							<hr>
+							
+							<script type="text/html" id="groupTemp">
+								{{each groups as g i}}
+									<button type="button" class="btn btn-default" onclick="obtain({{i+1}});">{{g}}</button>
+								{{/each}}
+							  	<button type="button" title="添加新组" class="btn btn-default glyphicon glyphicon-plus" onclick="group.cGroupName();"></button>
+							</script>
+
+							<div class="btn-group probe-group" id="probeGroupList"></div>
+
 							<script id="datatemp" type="text/html">  
         	                    {{each resdata as v i}}
     	                            <tr>
     	                            	<td>{{showindex+i}}</td>
     	                            	<td>{{v.district}}</td>
     	                            	<td>{{v.hbtime}}</td>
-    	                            	<td>{{v.hostname}}</td>
     	                            	<td>{{v.ip}}</td>
+    	                            	<td>{{v.hostname}}</td>
     	                            	<td>{{v.version}}</td>
     	                            </tr>
     	                        {{/each}} 			        	                   
 		        	        </script>
+		        	    
 							<table class="table table-striped table-bordered table-hover table-prolist" id="tableDada">
 								<thead>
 						        	<tr><th>编号</th><th>探针名称</th><th>最近运行时间</th><th>IP地址</th><th>地区</th><th>版本</th></tr>
@@ -117,29 +128,87 @@
 		</div>
 	</div>
 
+	<div class="modal fade">
+		<div class="modal-backdrop"></div>
+		<div class="probe-group-dialog">
+			<div class="modal-header">
+	        	<span class="close" aria-hidden="true" onclick="group.cCancelCreat();">&times;</span>
+	        	<h5 class="modal-title">添加／修改组</h5>
+		    </div>
+		    <div class="modal-body">
+	    		<div class="container-fluid">
+	    			<br>
+	    			<div class="form-group">
+	    			    <label for="groupName" class="col-sm-3 control-label">组名称</label>
+	    			    <div class="col-sm-9">
+	    			      <input type="text" class="form-control" id="groupName" placeholder="组名称">
+	    			    </div>
+	    			</div>
+	    			<div class="clearfix"></div>
+					<br>
+	    			<div class="alert alert-danger fade" id="noNameTips"></div>
+    			    <div class="col-sm-offset-3 col-sm-9">
+    			      <button type="submit" class="btn btn-default" onclick="group.cCancelCreat();">取 消</button>
+    			      <button type="submit" class="btn btn-primary" onclick="group.cNextStep();">下一步</button>
+    			    </div>
+    			   
+	    		</div>
+		    </div>
+		</div>
+		
+		<div class="group-multiselect">
+			<div class="modal-header">
+	        	<span class="close" aria-hidden="true" onclick="group.cCancelCreat();">&times;</span>
+	        	<h5 class="modal-title">添加／修改组</h5>
+		    </div>
+		    <div id="loadingLayer" class="mod-loading-layer">
+		        <div class="mod-loading-content">
+		            <i class="icon micon-loading"></i>
+		            <div class="mod-loading-layer__desc">加载中...</div>
+		        </div>
+		    </div>
+
+			<div class="row hide" id="multi_select">
+			    <div class="col-xs-5">
+			    	<h4>所有探针列表</h4>
+			        <select name="from[]" id="multiselect_from" class="multiselect form-control" size="10" multiple="multiple" data-right="#multiselect_to_1" data-right-all="#right_All_1" data-right-selected="#right_Selected_1" data-left-all="#left_All_1" data-left-selected="#left_Selected_1">
+			        </select>
+			    </div>
+			    
+			    <div class="col-xs-2 multi-option">
+			        <button type="button" id="right_All_1" class="btn btn-default btn-block"><i class="glyphicon glyphicon-forward"></i></button>
+			        <button type="button" id="right_Selected_1" class="btn btn-default btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
+			        <button type="button" id="left_Selected_1" class="btn btn-default btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
+			        <button type="button" id="left_All_1" class="btn btn-default btn-block"><i class="glyphicon glyphicon-backward"></i></button>
+			    </div>
+			    
+			    <div class="col-xs-5">
+			    	<h4>当前组所选探针</h4>
+			        <select name="to[]" id="multiselect_to_1" class="form-control" size="10" multiple="multiple"></select>
+			    </div>
+				<div class="clearfix"></div>
+				<p class="alert">按ctrl或command多选</p>
+			    <div class="btns">
+			      <button type="submit" class="btn btn-default" onclick="group.cPrevStep();">上一步</button>
+			      <button type="submit" class="btn btn-primary" onclick="group.cSaveGroup();">保&nbsp;&nbsp;存</button>
+			    </div>	
+			</div>
+			
+		    	   
+		</div>
+	</div><!-- /.modal -->
 	<script type="text/javascript" src="public/libs/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="public/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="public/js/jquery.cookie.js"></script>
 	<script type="text/javascript" src="public/js/jquery.page.js"></script>
 	<script type="text/javascript" src="public/js/template.js"></script>
+	<script type="text/javascript" src="public/js/multiselect.min.js"></script>
 	<script type="text/javascript" src="public/js/comm.js"></script>
 	<script type="text/javascript">
-	   	   
-	   $(function(){
-		    function obtain(){
-		   		// var requesturl = "http://192.168.5.233:8084/probe/rest/probeTask/query.do";
-		   		var requesturl = "test.php";
-		   		$('#J_searchBtn').data('searchkey',requesturl);
-		   	   	$('#datas').getdatas({
-		   		   	url:requesturl,
-		   		   	datatype:1
-		   	    })
-		    }
-			$('#refreshList').click(function(){
-				obtain();
-			})
-			obtain();
-	   })
-	   
+		$(function(){
+			loginManage.chack();
+			group.cInit();
+		})
 	</script>
 </body>
 </html>

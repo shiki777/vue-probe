@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>登录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="public/img/favicon.ico">
+	<link rel="stylesheet" href="public/libs/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="public/css/comm.css">
+	<style>
+		html,body{background:#f0f0f0;}.bg-danger{display: none;}
+	</style>
+</head>
+<body>
+	<div>
+		<section data-reactroot="" id="authenty_preview">
+			<section id="signin_main" class="authenty signin-main">			
+				<div class="section-content">
+					<div class="wrap">
+						<div class="container">
+							<div class="form-wrap">
+								<div class="row">
+									<div id="form_1" data-animation="bounceIn" class="bounceIn">
+										<div class="form-header"><h3>Snail Probe</h3></div>
+										<div class="form-main">
+											<fieldset class="form-group">
+												<label for="un_1">用户名</label>
+												<input type="text" name="username" value="" id="un_1" class="form-control" placeholder="用户名">
+												<p class="bg-danger">*请输入用户名</p>
+											</fieldset>
+
+											<fieldset class="form-group">
+												<label for="pw_1">密&nbsp;&nbsp;&nbsp;&nbsp;码</label>
+												<input type="password" name="password" value="" id="pw_1" class="form-control" placeholder="密码">
+												<p class="bg-danger">*请输入密码</p>
+											</fieldset>
+										<button type="button" class="btn btn-block btn-signin" onclick="loginManage.login();">登录</button>
+										</div>
+										<div class="form-footer">
+											<h6>BORN TO DREAM</h6>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+		
+			</section>
+		</section>
+	</div>
+	<script type="text/javascript" src="public/libs/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="public/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="public/js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="public/js/comm.js"></script>
+</body>
+</html>

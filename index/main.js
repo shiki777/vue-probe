@@ -20,9 +20,16 @@
             vm = new Vue({
             el : '#frame-body',
             store : probeStore,
+            component : {
+                page : 'page',
+                groups : 'groups'
+            },
             computed : {
                 probelist : function() {
                     return this.$store.state.probeList;
+                },
+                page : function() {
+                    return this.$store.state.probePage;
                 }
             }
         })        

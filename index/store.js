@@ -3,7 +3,11 @@
     var store = new Vuex.Store({
         state : {
             probeList : [], /*探针列表*/
-            probePage : 1 /*探针页数*/
+            probePage : 1, /*探针页数*/
+            groups : {
+                groups:['a','b','c'],
+                len:6
+            }
         },
         mutations : {
             updateList : function(state, list) {

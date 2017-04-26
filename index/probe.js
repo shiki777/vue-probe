@@ -1,7 +1,8 @@
 (function() {
 
     var PROBE_URL = 'http://10.220.10.60:8080/probe-service/probe/probeList';
-    var PROBE_URL = 'http://10.220.10.60:8080/probe/rest/probeTask/query.do';
+    var PROBE_URL = 'http://127.0.0.1:5000/probe-service/probe/probeList';
+    // var PROBE_URL = 'http://10.220.10.60:8080/probe/rest/probeTask/query.do';
     var PAGE_SIZE  = 10;
 
     function load(name,index,size) {

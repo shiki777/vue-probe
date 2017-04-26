@@ -143,7 +143,7 @@ var loginManage = {
   chack:function(){
     var hosturl = window.location.href.indexOf("login");
     if($.cookie("isLogin") == null || usecookies.getCookie("isLogin")==false && hosturl==-1) {
-        window.location.href = "/probe/login/login.html";
+        // window.location.href = "/probe/login/login.html";
         return;
     }  
   }
@@ -180,14 +180,14 @@ var group = {
       }else{
         //查询组名是否存在
         $.ajax({
-          url: 'test.php',
+          url: 'http://127.0.0.1:5000/addgroup',
           type: 'POST',
           dataType:'json',
           data: "groupName=" + groupName,
         }).done(function(res) {
           if(typeof(res)!='object' && res.code!=0){
             $('#noNameTips').text('阿西！返回有错，刷新再来try一把～').show().addClass('in');return;};
-          if (res.code != undefined) {
+          if (res.code == 1) {
             $('#noNameTips').text('小哥、组名已经有啦，换一个吧～').show().addClass('in');
           }else{
             group.groupname = groupName;

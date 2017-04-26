@@ -33,7 +33,7 @@
 			</div>
 		</div>
 
-		<div class="vFramework-body vFramework-full"> <!-- vFramework-mini-->
+		<div class="vFramework-body vFramework-full" id="frame-body"> <!-- vFramework-mini-->
 			<div class="vFramework-sidebar">			
 				<div class="sidebar-fold">
 					<button type="button" class="sidebar-toggle">
@@ -199,12 +199,18 @@
 	</div><!-- /.modal -->
 	<script type="text/javascript" src="../public/libs/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="../public/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../public/libs/vue/dist/vue.js"></script>
+	<script type="text/javascript" src="../public/libs/vue/dist/vue-resource.js"></script>
+	<script type="text/javascript" src="../public/libs/vuex.js"></script>
 	<script type="text/javascript" src="../public/js/jquery.cookie.js"></script>
 	<script type="text/javascript" src="../public/js/jquery.page.js"></script>
 	<script type="text/javascript" src="../public/js/template.js"></script>
 	<script type="text/javascript" src="../public/js/multiselect.min.js"></script>
 	<script type="text/javascript" src="../public/js/loginmanager.js"></script>
 	<script type="text/javascript" src="../public/js/comm.js"></script>
+	<!-- common end -->
+	<script src="./store.js"></script>
+	<script src="./main.js"></script>
 	<script type="text/javascript">
 		$(function(){
 			loginManage.chack();

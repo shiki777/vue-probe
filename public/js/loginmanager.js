@@ -31,8 +31,9 @@ var loginManage = {
         /*登录页登陆后直接跳转到首页*/
         if(location.href.match(/login/)){
           location.href = '/probe/index/index.html';
+        } else {
+          history.go(-1); 
         }
-        history.go(-1);
       }
     });
   },

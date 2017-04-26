@@ -104,50 +104,7 @@ var urls = {
   loginUrl : baseUrl + '/probe/rest/login/query.do',
   logoutUrl : baseUrl +  '/probe/rest/logout/query.do'
 }
-// 登录管理
-var loginManage = {
 
-  login:function(){
-      var reqData={
-        "userName":$('#un_1').val(),
-        "password":$('#pw_1').val()
-      };
-      $.ajax({
-        url: urls.loginUrl,
-        type: 'POST',
-        dataType: 'json',
-        contentType:"application/json; charset=utf-8",
-        data: JSON.stringify(reqData)
-      })
-      .done(function(res) {
-        var expiresDate= new Date();
-        expiresDate.setTime(expiresDate.getTime() + (10*60*1000));
-        if(res.status==0){
-          usecookies.setCookie("isLogin",true,expiresDate);
-          if(location.href.match(/login/)){
-            location.href = '/probe/index/index.html';
-          }
-          history.go(-1);
-        }
-      });
-  },
-  logout:function(){
-    $.get(urls.logoutUrl, function(res) {
-      console.log(res)
-      if(res.status==0){
-        usecookies.delCookie("isLogin");
-        window.location.href = "/probe/login/login.html";
-      }
-    });
-  },
-  chack:function(){
-    var hosturl = window.location.href.indexOf("login");
-    if($.cookie("isLogin") == null || usecookies.getCookie("isLogin")==false && hosturl==-1) {
-        // window.location.href = "/probe/login/login.html";
-        return;
-    }  
-  }
-}
 
 var group = {
   groupname:"probes",

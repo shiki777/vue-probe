@@ -1,6 +1,6 @@
 (function() {
 
-    var store = new Vuex.store({
+    var store = new Vuex.Store({
         state : {
             probeList : [], /*探针列表*/
             probePage : 1 /*探针页数*/
@@ -9,7 +9,7 @@
             updateList : function(state, list) {
                 state.probeList = formatList(list);
             },
-            updateProbe : function(state, page) {
+            updatePage : function(state, page) {
                 state.probePage = page;
             }
         },
@@ -18,7 +18,7 @@
                 context.commit('updateList', list);
             },
             updatePage : function(context, page) {
-                context.commit('updateProbe', page);
+                context.commit('updatePage', page);
             }
 
         }

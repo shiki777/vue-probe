@@ -2,12 +2,17 @@
 /*2组件通过vuex通信,写代码方便一点*/
 Vue.component('groups', {
     template: '<div class="btn-group probe-group" id="probeGroupList">\
-    <button type="button" class="btn btn-default" v-for="g in groups" gid="g.id" @click="onGroupBtnClick(g.id,g.name)">{{g.name}}</button>\
+    <div class="btn btn-default" v-for="g in groups" gid="g.id" @click="onGroupBtnClick(g.id,g.name)" :class="isCurrentGroup(g.id)">{{g.name}}</div>\
     <button type="button" title="添加新组" class="btn btn-default glyphicon glyphicon-plus" onclick="group.cGroupName();"></button>\
     </div>',
     computed : {
         groups : function() {
             return this.$store.state.groups;
+        }
+    },
+    data : function() {
+        return {
+            currentGroup : 0
         }
     },
     methods: {
@@ -34,7 +39,11 @@ Vue.component('groups', {
             }
             return res;
         },
+        isCurrentGroup : function(id) {
+             return id == this.currentGroup ? 'activeGroup' : '';
+        },
         onGroupBtnClick : function(id,name) {
+            this.currentGroup = id;
             /*懒得嵌套promise，直接commit了*/
             this.$store.commit('updateCurrentPage',1);            
             this.$store.dispatch('updateGroupid', id)

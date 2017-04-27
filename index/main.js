@@ -40,7 +40,8 @@
                                 .catch(function(e) {
                                     console.log(e);
                                 })
-                        })
+                        });
+                    this.$refs.groups.currentGroup = 0;
                 },
                 onFreshClick : function() {
                     var self = this;

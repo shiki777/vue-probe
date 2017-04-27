@@ -1,5 +1,6 @@
 (function() {
 
+    var BASE_URL = 'http://10.220.10.60:8089';
     var PROBE_URL = 'http://10.220.10.60:8080/probe-service/probe/probeList';
     var PROBE_URL = 'http://127.0.0.1:5000/probe-service/probe/probeList'; //通过探针名查询URL
     // var PROBE_URL = 'http://10.220.10.60:8080/probe/rest/probeTask/query.do';
@@ -50,6 +51,7 @@
 
     /*export*/
     window.snailprobe = {
+        BASE_URL : BASE_URL,
         probeUrl : PROBE_URL, //列表url
         pageSize : PAGE_SIZE, //页数
         load : load,

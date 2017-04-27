@@ -138,6 +138,8 @@ th.active .arrow{opacity:1;}
 
 .probe-group .activeGroup{background: #337ab7; color : #fff;}
 
+.show { display: block !important; }
+
 
 
 

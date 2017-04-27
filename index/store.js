@@ -4,6 +4,7 @@
         state : {
             probeList : [], /*探针列表*/
             probePage : 1, /*探针页数*/
+            groupid : 0, /*组号*/
             probeName : 'aaa',
             groups : {
                 groups:['a','b','c'],

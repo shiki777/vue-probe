@@ -18,11 +18,12 @@
 
     function createVm() {
             vm = new Vue({
-            el : '#frame-body',
+            el : '#page-wrap',
             store : probeStore,
             component : {
                 page : 'page',
-                groups : 'groups'
+                groups : 'groups',
+                group : 'group'
             },
             data : {
                 pname : ''

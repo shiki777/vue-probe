@@ -2,7 +2,7 @@ Vue.component('page', {
     template : '<ul class="pagingUl">\
     <li v-for="n in pageNum"><a href="javascript:" :class="isCurrent(n)" @click="onPageClick(n)">{{n}}</a></li>\
     </ul>',
-    props : ['loadfunc'],
+    props : ['loadfunc','loadcb','loadparam'],
     data : function() {
         return {
             currentPage : 1
@@ -15,12 +15,10 @@ Vue.component('page', {
     },
     methods : {
         load : function() {
+            var name = this.loadparam || '';
             if(typeof snailprobe[this.loadfunc] == 'function'){
-                snailprobe[this.loadfunc]('',this.currentPage)
-                .then(function(data) {
-                    probeStore.commit('updateList',data.body.probeList);
-                    probeStore.commit('updatePage',data.body.indexCounts);
-                })
+                snailprobe[this.loadfunc](name,this.currentPage)
+                .then(snailprobe[this.loadcb])
                 .catch(function(err) {
                     console.log(err)
                 })                

@@ -4,6 +4,7 @@
         state : {
             probeList : [], /*探针列表*/
             probePage : 1, /*探针页数*/
+            probeName : 'aaa',
             groups : {
                 groups:['a','b','c'],
                 len:6
@@ -15,6 +16,9 @@
             },
             updatePage : function(state, page) {
                 state.probePage = page;
+            },
+            updateProbeName : function(state,name) {
+                state.probeName = name;
             }
         },
         actions : {
@@ -23,6 +27,9 @@
             },
             updatePage : function(context, page) {
                 context.commit('updatePage', page);
+            },
+            updateProbeName : function(context, name) {
+                context.commit('updateProbeName', name);
             }
 
         }

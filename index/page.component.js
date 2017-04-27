@@ -3,14 +3,12 @@ Vue.component('page', {
     <li v-for="n in pageNum"><a href="javascript:" :class="isCurrent(n)" @click="onPageClick(n)">{{n}}</a></li>\
     </ul>',
     props : ['loadfunc','loadcb'],
-    data : function() {
-        return {
-            currentPage : 1
-        }
-    },
     computed : {
         pageNum : function() {
             return this.$store.state.probePage;
+        },
+        currentPage : function() {
+            return this.$store.state.currentPage;
         }
     },
     methods : {
@@ -27,11 +25,12 @@ Vue.component('page', {
             return n == this.currentPage ? 'activP' : '';
         },
         onPageClick : function(n) {
-            this.currentPage = n;
-            this.load();
-        },
-        setCurrentPage : function(p) {
-            this.currentPage = p;
+            var self = this;
+            this.$store.dispatch('updateCurrentPage',n)
+                .then(function() {
+                    self.load();
+                })
+                .catch(function(e) {console.log(e)});
         }
     }
 })

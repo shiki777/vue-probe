@@ -4,14 +4,24 @@
     var PROBE_URL = 'http://127.0.0.1:5000/probe-service/probe/probeList'; //通过探针名查询URL
     // var PROBE_URL = 'http://10.220.10.60:8080/probe/rest/probeTask/query.do';
     var GROUP_URL = 'http://10.220.10.60:8000/probe-service/probeOrg/probeListByOrgId'
+    var GROUP_URL = 'http://127.0.0.1:5000/org';
     var PAGE_SIZE  = 10;
 
-    /*根据是否选择组id来选择调用哪一个load*/
-    function load(name,index,size) {
-        if(probeStore.state.groupid){
-            return loadByGroup(name,index,size);
+    var lastIndex = 0;
+
+    /*根据是否选择组id来选择调用哪一个load param参数暂时弃用*/
+    function load(param,index,size) {
+        if(index == 0){
+
         } else {
-            return probeLoad(name,index,size);
+            /*index不传参数则用lastIndex*/
+            var index = index  ? index : lastIndex;
+        }
+        lastIndex = index;
+        if(probeStore.state.groupid){
+            return loadByGroup(probeStore.state.groupid,index,size);
+        } else {
+            return probeLoad(probeStore.state.probeName,index,size);
         }
     }
 

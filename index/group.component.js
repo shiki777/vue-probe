@@ -1,12 +1,13 @@
 /*分组组件*/
+/*2组件通过vuex通信,写代码方便一点*/
 Vue.component('groups', {
     template: '<div class="btn-group probe-group" id="probeGroupList">\
-    <button type="button" class="btn btn-default" v-for="g in groups" gid="g.id">{{g.name}}</button>\
+    <button type="button" class="btn btn-default" v-for="g in groups" gid="g.id" @click="onGroupBtnClick(g.id,g.name)">{{g.name}}</button>\
     <button type="button" title="添加新组" class="btn btn-default glyphicon glyphicon-plus" onclick="group.cGroupName();"></button>\
     </div>',
-    data: function() {
-        return {
-            groups: []
+    computed : {
+        groups : function() {
+            return this.$store.state.groups;
         }
     },
     methods: {
@@ -16,7 +17,7 @@ Vue.component('groups', {
             var self = this;
             Vue.http.post(GROUP_URL)
             .then(function(data) {
-                self.groups = self.formatGroups(data.body.list);
+                self.$store.dispatch('updateGroups', self.formatGroups(data.body.list));
             })
             .catch(function(e) {
                 console.log(e)
@@ -32,7 +33,18 @@ Vue.component('groups', {
                 });
             }
             return res;
-        }
+        },
+        onGroupBtnClick : function(id,name) {
+            /*懒得嵌套promise，直接commit了*/
+            this.$store.commit('updateCurrentPage',1);            
+            this.$store.dispatch('updateGroupid', id)
+                .then(function() {
+                    snailprobe.load(id,0)
+                    .then(snailprobe.probeLoadCallback)
+                    .catch(function(e) {console.log(e)})
+                })
+                .catch(function(e) {console.log(e)})
+        }        
     },
     created: function() {
         this.load();

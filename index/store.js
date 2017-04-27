@@ -4,12 +4,10 @@
         state : {
             probeList : [], /*探针列表*/
             probePage : 1, /*探针页数*/
+            currentPage : 1, /*当前页数*/
             groupid : 0, /*组号*/
-            probeName : 'aaa',
-            groups : {
-                groups:['a','b','c'],
-                len:6
-            }
+            probeName : '',
+            groups : [] /*组信息*/
         },
         mutations : {
             updateList : function(state, list) {
@@ -18,8 +16,20 @@
             updatePage : function(state, page) {
                 state.probePage = page;
             },
+            updateCurrentPage : function(state,p) {
+                state.currentPage = p;
+            },
             updateProbeName : function(state,name) {
                 state.probeName = name;
+            },
+            updateGroups : function(state, groups) {
+                state.groups = groups;
+            },
+            updateGroupid : function(state, id) {
+                state.groupid = id;
+            },
+            addGroup : function(state, group) {
+                state.groups.push(group);
             }
         },
         actions : {
@@ -29,9 +39,21 @@
             updatePage : function(context, page) {
                 context.commit('updatePage', page);
             },
+            updateCurrentPage : function(context,p) {
+                context.commit('updateCurrentPage',p);
+            },
             updateProbeName : function(context, name) {
                 context.commit('updateProbeName', name);
-            }
+            },
+            updateGroups : function(context, group) {
+                context.commit('updateGroups',group);
+            },
+            updateGroupid : function(context, id) {
+                context.commit('updateGroupid',id);
+            },
+            addGroup : function(context, group) {
+                context.commit('addGroup',group);
+            }            
 
         }
 

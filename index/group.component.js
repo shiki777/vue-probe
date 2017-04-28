@@ -211,7 +211,9 @@ Vue.component('group', {
                 this.selectedProbes = [];
                 return 0;
             }
+            this.reset();
             this.loadSelectedProbes();    
+            console.log('load' + this.$store.state.editGroupid)
             return this.$store.state.editGroupid;       
         }
     },
@@ -270,7 +272,9 @@ Vue.component('group', {
         },
         hidePanel : function() {
             this.$store.dispatch('updateGroupPanel',{show : false,step : 1});
-            this.reset();
+            if(!this.$store.state.editGroupid){
+                this.reset();
+            }
         },
         toStep2 : function() {
             if(!this.groupName){
@@ -338,7 +342,6 @@ Vue.component('group', {
                             self.$store.dispatch('addGroup',{id : data.body.orgId,name : self.groupName});
                         }
                         self.$store.dispatch('updateGroupPanel',{step : 1,show : false});
-                        self.reset();
                     } else {
                         alert('新建失败');
                     }
@@ -358,6 +361,7 @@ Vue.component('group', {
                 this.errMsg = msg;
             },
             reset : function() {
+                console.log('reset')
                 this.groupName = '';
                 this.error = false;
                 this.errMsg = '';

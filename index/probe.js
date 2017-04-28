@@ -1,11 +1,8 @@
 (function() {
 
-    var BASE_URL = 'http://10.220.10.60:8089';
-    var PROBE_URL = 'http://10.220.10.60:8080/probe-service/probe/probeList';
-    var PROBE_URL = 'http://127.0.0.1:5000/probe-service/probe/probeList'; //通过探针名查询URL
-    // var PROBE_URL = 'http://10.220.10.60:8080/probe/rest/probeTask/query.do';
-    var GROUP_URL = 'http://10.220.10.60:8000/probe-service/probeOrg/probeListByOrgId'
-    var GROUP_URL = 'http://127.0.0.1:5000/org';
+    var BASE_URL = 'http://10.220.10.60:8087';
+    var PROBE_URL = BASE_URL + '/probe-service/probe/probeList';
+    var GROUP_URL = BASE_URL + '/probe-service/probeOrg/probeListByOrgId';
     var PAGE_SIZE  = 10;
 
     var lastIndex = 0;

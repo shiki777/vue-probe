@@ -11,7 +11,6 @@
             groupPanelData : {
                 step : 1, /*默认状态是1*/
                 groupName : '',
-                probeList : [], //未选择的探针列表,暂时等于probelist，等需求
                 show : false
             } /*组件弹窗数据*/
         },
@@ -39,6 +38,17 @@
             },
             addGroup : function(state, group) {
                 state.groups.push(group);
+            },
+            delGroup : function(state, id) {
+                var index = -1;
+                for(var i = 0; i < state.groups.length; i++){
+                    if(state.groups[i].id == id){
+                        index = i;
+                    }
+                }
+                if(index >=0){
+                    state.groups.splice(index,1);
+                }
             },
             updateGroupPanel : function(state, opt) {
                 var opt = opt || {};
@@ -78,6 +88,9 @@
             addGroup : function(context, group) {
                 context.commit('addGroup',group);
             },
+            delGroup : function(context, id) {
+                context.commit('delGroup',id);
+            },
             updateGroupPanel : function(context,opt) {
                 context.commit('updateGroupPanel',opt);
             }         
@@ -92,10 +105,10 @@
         for(var i = 0; i < l; i++){
             var probeItem = list[i];
             res.push({
-                name : probeItem['district'],
+                name : probeItem['hostname'],
                 time : probeItem['hbtime'],
                 ip : probeItem['ip'],
-                area : probeItem['hostname'],
+                area : probeItem['district'],
                 version : probeItem['version']
             });
         };

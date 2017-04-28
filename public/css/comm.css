@@ -139,10 +139,10 @@ th.active .arrow{opacity:1;}
 .probe-group .activeGroup{background: #337ab7; color : #fff;}
 
 .show { display: block !important; }
-
-
-
-
+.probe-group {position: relative;}
+.group-hover-panel {position: absolute; display: none;top: -40px;left: 7px;}
+.probe-group:hover .group-hover-panel {display: block;}
+.group-hover-panel div {cursor: pointer;}
 
 
 

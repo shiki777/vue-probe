@@ -2,7 +2,7 @@
 /*2组件通过vuex通信,写代码方便一点,应该通过父子组件通信的*/
 Vue.component('groups', {
     template: '<div class="btn-group probe-group" id="probeGroupList">\
-    <div class="btn btn-default" v-for="g in groups" gid="g.id" @click="onGroupBtnClick(g.id,g.name)" :class="isCurrentGroup(g.id)">{{g.name}}</div>\
+    <div class="btn btn-default group-btn" v-for="g in groups" :gid="g.id" @click="onGroupBtnClick(g.id,g.name)" :class="isCurrentGroup(g.id)">{{g.name}}<div class="group-hover-panel"><div @click="editGroup(g.id,$event)">编辑</div><div @click="delGroup(g.id,$event)">删除</div></div></div>\
     <button type="button" title="添加新组" class="btn btn-default glyphicon glyphicon-plus" @click="showPanel()"></button>\
     </div>',
     computed : {
@@ -17,12 +17,16 @@ Vue.component('groups', {
     },
     methods: {
         load: function() {
-            var GROUP_URL = 'http://10.220.10.60:8087/probe-service/org/orgList';
-            var GROUP_URL = 'http://127.0.0.1:5000/groups';
+            var GROUP_URL = snailprobe.BASE_URL + '/probe-service/org/orgList';
             var self = this;
-            Vue.http.post(GROUP_URL)
+            var reqBody = {
+                consult : '',
+                pageIndex : 0,
+                pageSize : 10
+            };
+            Vue.http.post(GROUP_URL,reqBody)
             .then(function(data) {
-                self.$store.dispatch('updateGroups', self.formatGroups(data.body.list));
+                self.$store.dispatch('updateGroups', self.formatGroups(data.body.orgList));
             })
             .catch(function(e) {
                 console.log(e)
@@ -56,7 +60,34 @@ Vue.component('groups', {
         },
         showPanel : function() {
             this.$store.dispatch('updateGroupPanel', {show : true});
-        }        
+        },
+        delGroup : function(id,e) {
+            /*阻止冒泡*/
+            e.stopPropagation();
+            var DEL_URL = snailprobe.BASE_URL +  '/probe-service/org/orgDelete'
+            var requestBody = {
+                orgId : id
+            };
+            var self = this;
+            Vue.http.post(DEL_URL,requestBody)
+                .then(function(data) {
+                    /*0是成功*/
+                    if(data.body.status == 0){
+                        self.$store.dispatch('delGroup',id);
+                    } else {
+                        alert('删除失败');
+                    }
+                })
+                .catch(function(e) {console.log(e)});
+                return false;
+        },
+        editGroup : function(id) {
+            var CHECK_URL = snailprobe.BASE_URL +  '/probe-service/org/queryCountByOrgName'
+            var requestBody = {
+                name : this.groupName
+            };
+            Vue.http.post(CHECK_URL,requestBody); 
+        }
     },
     created: function() {
         this.load();
@@ -106,14 +137,14 @@ Vue.component('group', {
                     <div class="col-xs-5">\
                         <h4>所有探针列表</h4>\
                         <select name="from[]" id="multiselect_from" class="multiselect form-control" size="10" multiple="multiple" data-right="#multiselect_to_1" data-right-all="#right_All_1" data-right-selected="#right_Selected_1" data-left-all="#left_All_1" data-left-selected="#left_Selected_1">\
-                        <option :value="i.name" v-for="i in panelData.probeList">{{i.name}}</option> \
+                        <option :value="i.name" v-for="i in selectProbes">{{i.name}}</option> \
                         </select>\
                     </div>\
                     <div class="col-xs-2 multi-option">\
                         <button type="button" id="right_All_1" class="btn btn-default btn-block"><i class="glyphicon glyphicon-forward"></i></button>\
                         <button type="button" id="right_Selected_1" class="btn btn-default btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>\
                         <button type="button" id="left_Selected_1" class="btn btn-default btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>\
-                        <button type="button" id="left_All_1" class="btn btn-default btn-block"><i class="glyphicon glyphicon-backward"></i></button>\
+                       <button type="button" id="left_All_1" class="btn btn-default btn-block"><i class="glyphicon glyphicon-backward"></i></button>\
                     </div>\
                     <div class="col-xs-5">\
                         <h4>当前组所选探针</h4>\
@@ -134,6 +165,8 @@ Vue.component('group', {
             groupName : '',
             error : false,
             errMsg : '',
+            /*可供选择的探针*/
+            selectProbes : [],
             /*选中的探针*/
             selectedProbes : []
         }
@@ -163,33 +196,52 @@ Vue.component('group', {
             return this.error ? 'show in' : '';
         }
     },
-        methods : {
-            hidePanel : function() {
-                this.$store.dispatch('updateGroupPanel',{show : false});
-                this.reset();
-            },
-            toStep2 : function() {
-                if(!this.groupName){
-                    this.setErrorPanel(true,'组名不能为空');
-                    return;
+    methods : {
+        loadSelectProbes : function(index) {
+            var PROBE_URL = snailprobe.BASE_URL + '/probe-service/probe/probeList';
+            var requestBody = {
+                hostname : '',
+                pageIndex : parseInt(index,10) || 0,
+                pageSize : 20
+            };
+            var self = this;
+            Vue.http.post(PROBE_URL,requestBody)
+            .then(function(data) {
+                for(var i = 0; i < data.body.probeList.length; i++){
+                    var probeItem = data.body.probeList[i];
+                    self.selectProbes.push({
+                        name : probeItem['hostname'],
+                        time : probeItem['hbtime'],
+                        ip : probeItem['ip'],
+                        area : probeItem['district'],
+                        version : probeItem['version']
+                    })
                 }
-                var self = this;
-                self.$store.dispatch('updateGroupPanel',{step : 2});
-                self.initMult();
-                           
-                // this.checkGroupName()
-                //     .then(function(data) {
-                //         /*true代表成功*/
-                //         if(!data.body.isUnique){
-                //             self.setErrorPanel(true,'组名重复，请更换');
-                //         } else {
-                //             self.$store.dispatch('updateGroupPanel',{step : 2});
-                //             self.initMult();
-                           
-                //         }
-                //     })
-                //     .catch(function(e) {console.log(e)});
-            },
+            })
+            .catch(function(e) {console.log(e)});
+        },
+        hidePanel : function() {
+            this.$store.dispatch('updateGroupPanel',{show : false});
+            this.reset();
+        },
+        toStep2 : function() {
+            if(!this.groupName){
+                this.setErrorPanel(true,'组名不能为空');
+                return;
+            }
+            var self = this;
+            this.checkGroupName()
+            .then(function(data) {
+                /*true代表成功*/
+                if(!data.body.isUnique){
+                    self.setErrorPanel(true,'组名重复，请更换');
+                } else {
+                    self.$store.dispatch('updateGroupPanel',{step : 2});
+                    self.initMult();
+                }
+            })
+            .catch(function(e) {console.log(e)});
+        },
             //初始化多选插件
             initMult: function() {
                 var self = this;
@@ -213,6 +265,31 @@ Vue.component('group', {
                 this.$store.dispatch('updateGroupPanel',{step : 1});
             },
             submitGroup : function() {
+                if(this.selectedProbes.length == 0){
+                    alert('请选择探针');
+                    return;
+                }
+                var CREATE_URL = snailprobe.BASE_URL + '/probe-service/org/orgNew';
+                var requestBody = {
+                    "organization":{
+                        "name":this.groupName,
+                        "counts":this.selectedProbes.length
+                    },
+                    "hostNameList":this.selectedProbes
+                };
+                var self = this;
+                Vue.http.post(CREATE_URL,requestBody)
+                .then(function(data) {
+                    /*成功*/
+                    if(data.body.status == 0){
+                        self.$store.dispatch('addGroup',{id : data.body.orgId,name : self.groupName});
+                        self.$store.dispatch('updateGroupPanel',{step : 1,show : false});
+                        self.reset();
+                    } else {
+                        alert('新建失败');
+                    }
+                })
+                .catch(function(e) {console.log(e)});
             },
             /*检查组名是否重复*/
             checkGroupName : function() {
@@ -230,6 +307,10 @@ Vue.component('group', {
                 this.groupName = '';
                 this.error = false;
                 this.errMsg = '';
+                this.selectedProbes = [];
             }
-        }    
+        },
+        created : function() {
+            this.loadSelectProbes(0);
+        }
 });

@@ -6,6 +6,7 @@
             probePage : 1, /*探针页数*/
             currentPage : 1, /*当前页数*/
             groupid : 0, /*组号*/
+            editGroupid : 0, /*编辑的组号，暂时把store当消息总线用,用于组件之间通信*/
             probeName : '', /*探针名*/
             groups : [], /*组信息*/
             groupPanelData : {
@@ -36,6 +37,9 @@
             updateGroupid : function(state, id) {
                 state.groupid = id;
             },
+            updateEditGroupid : function(state,id) {
+                state.editGroupid = id;
+            },
             addGroup : function(state, group) {
                 state.groups.push(group);
             },
@@ -57,9 +61,6 @@
                 }
                 if(opt.groupName){
                     state.groupPanelData.groupName = opt.groupName;
-                }
-                if(opt.probeList){
-                    state.groupPanelData.probeList = opt.probeList;
                 }
                 if(typeof opt.show == 'boolean'){
                     state.groupPanelData.show = opt.show;
@@ -84,6 +85,9 @@
             },
             updateGroupid : function(context, id) {
                 context.commit('updateGroupid',id);
+            },
+            updateEditGroupid : function(context,id) {
+                context.commit('updateEditGroupid',id);
             },
             addGroup : function(context, group) {
                 context.commit('addGroup',group);

@@ -2,8 +2,8 @@
 /*2组件通过vuex通信,写代码方便一点,应该通过父子组件通信的*/
 Vue.component('groups', {
     template: '<div class="btn-group probe-group" id="probeGroupList">\
-    <div class="btn btn-default group-btn" v-for="g in groups" :gid="g.id" @click="onGroupBtnClick(g.id,g.name)" :class="isCurrentGroup(g.id)">{{g.name}}<div class="group-hover-panel"><div @click="editGroup(g.id,$event)">编辑</div><div @click="delGroup(g.id,$event)">删除</div></div></div>\
-    <button type="button" title="添加新组" class="btn btn-default glyphicon glyphicon-plus" @click="showPanel()"></button>\
+    <div class="btn btn-default group-btn" v-for="g in groups" :gid="g.id" @click="onGroupBtnClick(g.id,g.name)" :class="isCurrentGroup(g.id)">{{g.name}}<div class="group-hover-panel"><div @click="editGroup(g.id,g.name,$event)">编辑</div><div @click="delGroup(g.id,$event)">删除</div></div></div>\
+    <button type="button" title="添加新组" class="btn btn-default glyphicon glyphicon-plus" @click="createGroup()"></button>\
     </div>',
     computed : {
         groups : function() {
@@ -22,7 +22,7 @@ Vue.component('groups', {
             var reqBody = {
                 consult : '',
                 pageIndex : 0,
-                pageSize : 10
+                pageSize : 30
             };
             Vue.http.post(GROUP_URL,reqBody)
             .then(function(data) {
@@ -58,7 +58,8 @@ Vue.component('groups', {
                 })
                 .catch(function(e) {console.log(e)})
         },
-        showPanel : function() {
+        createGroup : function() {
+            this.$store.dispatch('editGroupid',0);
             this.$store.dispatch('updateGroupPanel', {show : true});
         },
         delGroup : function(id,e) {
@@ -81,12 +82,12 @@ Vue.component('groups', {
                 .catch(function(e) {console.log(e)});
                 return false;
         },
-        editGroup : function(id) {
-            var CHECK_URL = snailprobe.BASE_URL +  '/probe-service/org/queryCountByOrgName'
-            var requestBody = {
-                name : this.groupName
-            };
-            Vue.http.post(CHECK_URL,requestBody); 
+        editGroup : function(id,name,e) {
+            /*阻止冒泡*/
+            e.stopPropagation();            
+            this.$store.dispatch('updateEditGroupid', id); 
+            this.$store.dispatch('updateGroupPanel', {step:2,groupName:name,show:true}); 
+            return false;
         }
     },
     created: function() {
@@ -137,7 +138,7 @@ Vue.component('group', {
                     <div class="col-xs-5">\
                         <h4>所有探针列表</h4>\
                         <select name="from[]" id="multiselect_from" class="multiselect form-control" size="10" multiple="multiple" data-right="#multiselect_to_1" data-right-all="#right_All_1" data-right-selected="#right_Selected_1" data-left-all="#left_All_1" data-left-selected="#left_Selected_1">\
-                        <option :value="i.name" v-for="i in selectProbes">{{i.name}}</option> \
+                            <option :value="i.name" v-for="i in selectProbes">{{i.name}}</option> \
                         </select>\
                     </div>\
                     <div class="col-xs-2 multi-option">\
@@ -148,7 +149,9 @@ Vue.component('group', {
                     </div>\
                     <div class="col-xs-5">\
                         <h4>当前组所选探针</h4>\
-                        <select name="to[]" id="multiselect_to_1" class="form-control" size="10" multiple="multiple"></select>\
+                        <select name="to[]" id="multiselect_to_1" class="form-control" size="10" multiple="multiple">\
+                        <option :value="i.name" v-for="i in pluginProbes">{{i.name}}</option> \
+                        </select>\
                     </div>\
                     <div class="clearfix"></div>\
                     <p class="alert">按ctrl或command多选</p>\
@@ -168,11 +171,16 @@ Vue.component('group', {
             /*可供选择的探针*/
             selectProbes : [],
             /*选中的探针*/
-            selectedProbes : []
+            selectedProbes : [],
+            /*缓存的选择探针列表*/
+            cacheProbes : [],
+            /*用于给插件渲染的数组，只会在拉完接口后使用*/
+            pluginProbes : []
         }
     },
     computed : {
         panelData : function() {
+            this.groupName = this.$store.state.groupPanelData.groupName;
             return this.$store.state.groupPanelData;
         },
         /*步骤一显示控制*/
@@ -190,18 +198,30 @@ Vue.component('group', {
             return 'show in';
         },
         panelMaskClass : function() {
+            /*hack vue computed属性，只有被调用时候会被计算*/
+            console.log('hack vue ' + this.selectedProbesProxy);
             return this.$store.state.groupPanelData.show ? 'in show' : '';
         },
         errorShow : function() {
             return this.error ? 'show in' : '';
+        },
+        /*selectedProbesProxy是一个代理属性，用于更新选中探针列表*/
+        selectedProbesProxy : function() {
+            if(this.$store.state.editGroupid == 0){
+                this.selectedProbes = [];
+                return 0;
+            }
+            this.loadSelectedProbes();    
+            return this.$store.state.editGroupid;       
         }
     },
     methods : {
+        /*拉取可选择探针*/
         loadSelectProbes : function(index) {
             var PROBE_URL = snailprobe.BASE_URL + '/probe-service/probe/probeList';
             var requestBody = {
                 hostname : '',
-                pageIndex : parseInt(index,10) || 0,
+                pageIndex : index || 0,
                 pageSize : 20
             };
             var self = this;
@@ -216,12 +236,40 @@ Vue.component('group', {
                         area : probeItem['district'],
                         version : probeItem['version']
                     })
+                };
+                self.cacheProbes = self.copy(self.selectProbes);
+            })
+            .catch(function(e) {console.log(e)});
+        },
+        /*拉取已选择探针*/
+        loadSelectedProbes : function(index) {
+            var PROBE_URL = snailprobe.BASE_URL + '/probe-service/probeOrg/probeListByOrgId';
+            var requestBody = {
+                orgId : this.$store.state.editGroupid,
+                pageIndex : index || 0,
+                pageSize : 20
+            };
+            var self = this;
+            Vue.http.post(PROBE_URL,requestBody)
+            .then(function(data) {
+                for(var i = 0; i < data.body.probeList.length; i++){
+                    var probeItem = data.body.probeList[i];
+                    self.selectedProbes.push({
+                        name : probeItem['hostname'],
+                        time : probeItem['hbtime'],
+                        ip : probeItem['ip'],
+                        area : probeItem['district'],
+                        version : probeItem['version']
+                    })
                 }
+                self.removeSameProbeFromList();
+                self.pluginProbes = self.copy(self.selectedProbes);
+                self.initMult()
             })
             .catch(function(e) {console.log(e)});
         },
         hidePanel : function() {
-            this.$store.dispatch('updateGroupPanel',{show : false});
+            this.$store.dispatch('updateGroupPanel',{show : false,step : 1});
             this.reset();
         },
         toStep2 : function() {
@@ -237,8 +285,8 @@ Vue.component('group', {
                     self.setErrorPanel(true,'组名重复，请更换');
                 } else {
                     self.$store.dispatch('updateGroupPanel',{step : 2});
-                    self.initMult();
                 }
+                self.initMult();
             })
             .catch(function(e) {console.log(e)});
         },
@@ -248,15 +296,12 @@ Vue.component('group', {
                 $('.multiselect').multiselect({
                     afterMoveToRight : function(left,right,option) {
                         for(var i =0; i < option.length;i++){
-                            self.selectedProbes.push(option[i].value);
+                            self.selectedProbes.push({name : option[i].value});
                         }
                     },
                     afterMoveToLeft : function(left,right,option) {
                         for(var i = option.length; i > 0; i--){
-                            var index = self.selectedProbes.indexOf(option[i-1].value);
-                            if(index >=0){
-                                self.selectedProbes.splice(index,1);
-                            }
+                            self.removeProbeFromList(self.selectedProbes,option[i-1].value);
                         }
                     }
                 });
@@ -270,19 +315,28 @@ Vue.component('group', {
                     return;
                 }
                 var CREATE_URL = snailprobe.BASE_URL + '/probe-service/org/orgNew';
+                var UPDATE_URL = snailprobe.BASE_URL + '/probe-service/org/orgUpdate';
+                var probes = this.getSubmitProbes();
                 var requestBody = {
                     "organization":{
                         "name":this.groupName,
-                        "counts":this.selectedProbes.length
+                        "counts":probes.length
                     },
-                    "hostNameList":this.selectedProbes
+                    "hostNameList":probes
                 };
                 var self = this;
-                Vue.http.post(CREATE_URL,requestBody)
+                var type = this.$store.state.editGroupid ? 'update' : 'create';
+                if(type == 'update'){
+                    requestBody.organization.id = this.$store.state.editGroupid;
+                }
+                var url = type == 'update' ? UPDATE_URL : CREATE_URL;
+                Vue.http.post(url,requestBody)
                 .then(function(data) {
                     /*成功*/
                     if(data.body.status == 0){
-                        self.$store.dispatch('addGroup',{id : data.body.orgId,name : self.groupName});
+                        if(type == 'create'){
+                            self.$store.dispatch('addGroup',{id : data.body.orgId,name : self.groupName});
+                        }
                         self.$store.dispatch('updateGroupPanel',{step : 1,show : false});
                         self.reset();
                     } else {
@@ -308,9 +362,39 @@ Vue.component('group', {
                 this.error = false;
                 this.errMsg = '';
                 this.selectedProbes = [];
+                this.selectProbes = this.copy(this.cacheProbes);
+                this.pluginProbes = [];
+            },
+            /*从可选探针中去除已选探针*/
+            removeSameProbeFromList : function() {
+                var l = this.selectedProbes.length;
+                for(var i = 0; i < l; i++){
+                    this.removeProbeFromList(this.selectProbes ,this.selectedProbes[i].name);
+                }
+            },
+            removeProbeFromList : function(list,probeName) {
+                var l = list.length;
+                for(var i = l; i > 0; i--){
+                    if(probeName == list[i-1].name){
+                        list.splice(i-1,1);
+                        return;
+                    }
+                }
+            },
+            copy : function(obj) {
+                return JSON.parse(JSON.stringify(obj));
+            },
+            getSubmitProbes : function() {
+                var res = [];
+                for(var i = 0; i < this.selectedProbes.length; i++){
+                    res.push(this.selectedProbes[i].name);
+                }
+                return res;
             }
         },
         created : function() {
             this.loadSelectProbes(0);
+            // 初始化时调用无效
+            // this.initMult();
         }
 });

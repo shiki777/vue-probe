@@ -33,6 +33,7 @@
                     var self = this;
                     /*懒得嵌套promise，直接commit了*/
                     this.$store.commit('updateCurrentPage',1);
+                    this.$store.commit('updateGroupid',0);
                     this.$store.dispatch('updateProbeName',this.pname)
                         .then(function() {
                             snailprobe.load(self.pname,0)

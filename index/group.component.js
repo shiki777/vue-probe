@@ -138,7 +138,7 @@ Vue.component('group', {
                     <div class="col-xs-5">\
                         <h4>所有探针列表</h4>\
                         <select name="from[]" id="multiselect_from" class="multiselect form-control" size="10" multiple="multiple" data-right="#multiselect_to_1" data-right-all="#right_All_1" data-right-selected="#right_Selected_1" data-left-all="#left_All_1" data-left-selected="#left_Selected_1">\
-                            <option :value="i.name" v-for="i in leftPluginProbes">{{i.name}}</option> \
+                        <option v-for="p in leftPluginProbes" :value="p.name">{{p.name}}</option> \
                         </select>\
                     </div>\
                     <div class="col-xs-2 multi-option">\
@@ -220,13 +220,30 @@ Vue.component('group', {
         }
     },
     methods : {
+        /*插件和vue有些冲突，为了方便把插件HTML渲染从VUE拿出，改用js渲染，反正入口统一,只有此2处UI没使用vue data*/
         /*更新左侧选择栏*/
         updateLeftSelects : function(arrs) {
-            this.leftPluginProbes = this.copy(arrs);
+            var l_select = document.getElementById('multiselect_from');
+            if(l_select){
+                l_select.innerHTML = this.createHTML(arrs);
+            }
+            // this.leftPluginProbes = this.copy(arrs);
         },
         /*更新右侧选择栏*/
         updateRightSelects : function(arrs) {
-            this.pluginProbes = this.copy(arrs);
+            var r_select = document.getElementById('multiselect_to_1');
+            if(r_select){
+                r_select.innerHTML = this.createHTML(arrs);
+            }            
+            // this.pluginProbes = this.copy(arrs);
+        },
+        createHTML : function(arr) {
+            var html = ''
+            for(var i = 0; i < arr.length; i++){
+                var p = arr[i];
+                html += '<option value="' + p.name + '">' + p.name + '</option>';
+            }
+            return html;
         },
         /*拉取可选择探针*/
         loadSelectProbes : function(index) {
@@ -378,20 +395,13 @@ Vue.component('group', {
                 this.errMsg = msg;
             },
             reset : function() {
-                var s_left = document.getElementById('multiselect_from');
-                var s_right = document.getElementById('multiselect_to_1');
                 this.groupName = '';
                 this.error = false;
                 this.errMsg = '';
                 this.selectedProbes = [];
-                if(s_left){
-                    s_left.innerHTML = '';
-                }
-                if(s_right){
-                    s_right.innerHTML = '';
-                }
                 this.selectProbes = this.copy(this.cacheProbes);
                 this.updateLeftSelects(this.cacheProbes);
+                this.updateRightSelects([]);
                 this.pluginProbes = [];
             },
             /*从可选探针中去除已选探针*/

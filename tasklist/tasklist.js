@@ -43,8 +43,17 @@
         return Vue.http.post(HISTORY_URL,requestBody);
     }
 
-    window.snailtask = {
-
+    /*回调函数*/
+    function loadCallback(data) {
+        taskStore.dispatch('updateTaskList',data.body.taskList);
+        taskStore.dispatch('updatePage', data.body.indexCounts);
     }
+
+    window.snailtask = {
+        BASE_URL : BASE_URL,
+        pageSize : PAGE_SIZE,
+        load : load,
+        loadCallback : loadCallback
+    };
 
 })()

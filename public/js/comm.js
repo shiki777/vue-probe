@@ -14,6 +14,7 @@
       datatype = options.datatype,
       pagedome = opt.pagedome,
       vname = opt.vname;
+      var resUrl = 'http://10.220.10.60:8087/probe-service/task/taskList'
       var pageshow = {
       	getData(showindex,resUrl){ 
       		var def = $.Deferred();
@@ -89,6 +90,7 @@ function getParamValue(name){var paramsArray=getUrlParams();if(paramsArray!=null
 
 function obtain(n){
   var requrl = (n==1)?urls.probeUrl:urls.taskUrl;
+  console.log(urls.taskUrl)
   $('#J_searchBtn').data('searchkey',requrl);
   $('#datas').getdatas({
       url:requrl,
@@ -96,10 +98,10 @@ function obtain(n){
   })
 }
 
-var baseUrl = 'http://10.220.10.60:8080';
+var baseUrl = 'http://10.220.10.60:8087';
 var urls = {
   probeUrl : baseUrl + '/probe/rest/probeTask/query.do',
-  taskUrl : baseUrl + '/probe/rest/taskList/query.do',
+  taskUrl : baseUrl + '/probe-service/task/taskList',
   historyTaskUrl : baseUrl + '/probe/rest/historyTaskList/query.do',
   loginUrl : baseUrl + '/probe/rest/login/query.do',
   logoutUrl : baseUrl +  '/probe/rest/logout/query.do'

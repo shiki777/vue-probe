@@ -1,9 +1,9 @@
 (function() {
 
-  var baseUrl = 'http://10.220.10.60:8080';
+  var baseUrl = 'http://10.220.10.60:8089';
   var urls = {
-    loginUrl : baseUrl + '/probe/rest/login/query.do',
-    logoutUrl : baseUrl +  '/probe/rest/logout/query.do'
+    loginUrl : baseUrl + '/probe-service/rest/login/query.do',
+    logoutUrl : baseUrl +  '/probe-service/rest/logout/query.do'
   }  
   var COOKIE_TIME = 60 * 60 * 1000 * 24;
   var COOKIE_NAME = 'isLogin';

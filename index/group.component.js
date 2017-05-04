@@ -59,7 +59,7 @@ Vue.component('groups', {
                 .catch(function(e) {console.log(e)})
         },
         createGroup : function() {
-            this.$store.dispatch('editGroupid',0);
+            this.$store.dispatch('updateEditGroupid',0);
             this.$store.dispatch('updateGroupPanel', {show : true});
         },
         delGroup : function(id,e) {
@@ -138,7 +138,7 @@ Vue.component('group', {
                     <div class="col-xs-5">\
                         <h4>所有探针列表</h4>\
                         <select name="from[]" id="multiselect_from" class="multiselect form-control" size="10" multiple="multiple" data-right="#multiselect_to_1" data-right-all="#right_All_1" data-right-selected="#right_Selected_1" data-left-all="#left_All_1" data-left-selected="#left_Selected_1">\
-                            <option :value="i.name" v-for="i in selectProbes">{{i.name}}</option> \
+                            <option :value="i.name" v-for="i in leftPluginProbes">{{i.name}}</option> \
                         </select>\
                     </div>\
                     <div class="col-xs-2 multi-option">\
@@ -174,8 +174,10 @@ Vue.component('group', {
             selectedProbes : [],
             /*缓存的选择探针列表*/
             cacheProbes : [],
-            /*用于给插件渲染的数组，只会在拉完接口后使用*/
-            pluginProbes : []
+            /*用于给插件右侧渲染的数组，只会在拉完接口后使用*/
+            pluginProbes : [],
+            /*插件左侧渲染数据*/
+            leftPluginProbes : []
         }
     },
     computed : {
@@ -206,14 +208,14 @@ Vue.component('group', {
             return this.error ? 'show in' : '';
         },
         /*selectedProbesProxy是一个代理属性，用于更新选中探针列表*/
+        /**/
         selectedProbesProxy : function() {
             if(this.$store.state.editGroupid == 0){
-                this.selectedProbes = [];
+                this.reset();
                 return 0;
             }
             this.reset();
             this.loadSelectedProbes();    
-            console.log('load' + this.$store.state.editGroupid)
             return this.$store.state.editGroupid;       
         }
     },
@@ -239,6 +241,7 @@ Vue.component('group', {
                         version : probeItem['version']
                     })
                 };
+                self.leftPluginProbes = self.copy(self.selectProbes);
                 self.cacheProbes = self.copy(self.selectProbes);
             })
             .catch(function(e) {console.log(e)});
@@ -254,8 +257,11 @@ Vue.component('group', {
             var self = this;
             Vue.http.post(PROBE_URL,requestBody)
             .then(function(data) {
+                /*清空先前数据*/
+                self.selectedProbes = [];
                 for(var i = 0; i < data.body.probeList.length; i++){
                     var probeItem = data.body.probeList[i];
+                    
                     self.selectedProbes.push({
                         name : probeItem['hostname'],
                         time : probeItem['hbtime'],
@@ -265,6 +271,8 @@ Vue.component('group', {
                     })
                 }
                 self.removeSameProbeFromList();
+                /*vue的响应式数据 检测不到对象属性/数组属性的修改，需要全部赋值才可以同步UI*/
+                self.leftPluginProbes = self.copy(self.selectProbes);
                 self.pluginProbes = self.copy(self.selectedProbes);
                 self.initMult()
             })
@@ -272,6 +280,7 @@ Vue.component('group', {
         },
         hidePanel : function() {
             this.$store.dispatch('updateGroupPanel',{show : false,step : 1});
+            /*当前操作是创建组时重置数据,是编辑时保留以上数据*/
             if(!this.$store.state.editGroupid){
                 this.reset();
             }
@@ -361,12 +370,21 @@ Vue.component('group', {
                 this.errMsg = msg;
             },
             reset : function() {
-                console.log('reset')
+                var s_left = document.getElementById('multiselect_from');
+                var s_right = document.getElementById('multiselect_to_1');
                 this.groupName = '';
                 this.error = false;
                 this.errMsg = '';
                 this.selectedProbes = [];
+                if(s_left){
+                    s_left.innerHTML = '';
+                }
+                if(s_right){
+                    s_right.innerHTML = '';
+                }
+                this.selectProbes = [];
                 this.selectProbes = this.copy(this.cacheProbes);
+                this.leftPluginProbes = this.copy(this.cacheProbes);
                 this.pluginProbes = [];
             },
             /*从可选探针中去除已选探针*/

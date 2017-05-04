@@ -220,6 +220,14 @@ Vue.component('group', {
         }
     },
     methods : {
+        /*更新左侧选择栏*/
+        updateLeftSelects : function(arrs) {
+            this.leftPluginProbes = this.copy(arrs);
+        },
+        /*更新右侧选择栏*/
+        updateRightSelects : function(arrs) {
+            this.pluginProbes = this.copy(arrs);
+        },
         /*拉取可选择探针*/
         loadSelectProbes : function(index) {
             var PROBE_URL = snailprobe.BASE_URL + '/probe-service/probe/probeList';
@@ -241,7 +249,7 @@ Vue.component('group', {
                         version : probeItem['version']
                     })
                 };
-                self.leftPluginProbes = self.copy(self.selectProbes);
+                self.updateLeftSelects(self.selectProbes);
                 self.cacheProbes = self.copy(self.selectProbes);
             })
             .catch(function(e) {console.log(e)});
@@ -272,8 +280,8 @@ Vue.component('group', {
                 }
                 self.removeSameProbeFromList();
                 /*vue的响应式数据 检测不到对象属性/数组属性的修改，需要全部赋值才可以同步UI*/
-                self.leftPluginProbes = self.copy(self.selectProbes);
-                self.pluginProbes = self.copy(self.selectedProbes);
+                self.updateLeftSelects(self.selectProbes);
+                self.updateRightSelects(self.selectedProbes);
                 self.initMult()
             })
             .catch(function(e) {console.log(e)});
@@ -382,9 +390,8 @@ Vue.component('group', {
                 if(s_right){
                     s_right.innerHTML = '';
                 }
-                this.selectProbes = [];
                 this.selectProbes = this.copy(this.cacheProbes);
-                this.leftPluginProbes = this.copy(this.cacheProbes);
+                this.updateLeftSelects(this.cacheProbes);
                 this.pluginProbes = [];
             },
             /*从可选探针中去除已选探针*/

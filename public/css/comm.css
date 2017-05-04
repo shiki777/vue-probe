@@ -144,7 +144,10 @@ th.active .arrow{opacity:1;}
 .probe-group:hover .group-hover-panel {display: block;}
 .group-hover-panel div {cursor: pointer;}
 
-
+#datas td {
+    height: 25px;
+    line-height: 31px;
+}
 
 
 

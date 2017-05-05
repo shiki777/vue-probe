@@ -85,9 +85,9 @@
 							</ul><br>
 
 							<div class="input-group search-area">
-								<input type="text" class="form-control" placeholder="搜索任务..." id="searchQuery">						        
+								<input type="text" class="form-control" placeholder="搜索任务..." id="searchQuery" v-model="taskName">						        
 								<span class="input-group-btn">
-									<button class="btn btn-default" type="button" id="J_searchBtn" data-searchkey="">查找</button>
+									<button class="btn btn-default" type="button" id="J_searchBtn" data-searchkey="" @click="onSerchClick()">查找</button>
 								</span>
 							</div><!-- /input-group -->
 

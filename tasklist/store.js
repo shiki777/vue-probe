@@ -21,6 +21,9 @@
             },
             updateType : function(state,isHis) {
                 state.isHistory = isHis;
+            },
+            updateTaskName : function(state, name) {
+                state.taskName = name;
             }
         },
         actions : {        
@@ -35,6 +38,9 @@
             },
             updateType : function(context,isHis) {
                 context.commit('updateType', isHis);
+            },
+            updateTaskName : function(context,name) {
+                context.commit('updateTaskName', name);
             }
         }
 

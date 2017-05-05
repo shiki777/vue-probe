@@ -27,7 +27,8 @@
                 };
             },
             component : {
-                page : 'page'
+                page : 'page',
+                taskpanel : 'taskpanel'
             },
             computed : {
                 taskList : function() {
@@ -54,6 +55,9 @@
                 onSerchClick : function() {
                     this.$store.dispatch('updateTaskName', this.taskName)
                         .then(this.load);
+                },
+                onCreateTaskClick : function() {
+                    snailtask.messageBus.$emit('showPanel',true);
                 },
                 isActive : function(type) {
                     return this.type == type ? 'active' : '';

@@ -1,10 +1,11 @@
 (function() {
 
     var BASE_URL = 'http://10.220.10.60:8087';
-    var BASE_URL = 'http://127.0.0.1:5000';
     var CURRENT_URL = BASE_URL + '/probe-service/task/taskList';
     var HISTORY_URL = BASE_URL + '/probe-service/task/historyTaskList';
     var PAGE_SIZE  = 10;
+
+    var messageBus = new Vue();
 
     var lastIndex = 0;
 
@@ -54,7 +55,8 @@
         BASE_URL : BASE_URL,
         pageSize : PAGE_SIZE,
         load : load,
-        loadCallback : loadCallback
+        loadCallback : loadCallback,
+        messageBus : messageBus
     };
 
 })()

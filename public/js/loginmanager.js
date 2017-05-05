@@ -1,6 +1,6 @@
 (function() {
 
-  var baseUrl = 'http://10.220.10.60:8089';
+  var baseUrl = 'http://10.220.10.60:8087';
   var urls = {
     loginUrl : baseUrl + '/probe-service/rest/login/query.do',
     logoutUrl : baseUrl +  '/probe-service/rest/logout/query.do'

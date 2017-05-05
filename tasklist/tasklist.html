@@ -80,8 +80,8 @@
 					<div class="container-fluid" id="dataArea">
 						<div id="tasklist">
 							<ul class="nav nav-tabs" id="J_task_tab">
-								<li class="nowTask active"><a href="javascript:;">当前任务</a></li>
-								<li class="historyTask"><a href="javascript:;">已完成任务</a></li>
+								<li class="nowTask" :class="isActive('cur')" @click="onCurrentTaskClick()"><a href="javascript:;">当前任务</a></li>
+								<li class="historyTask" :class="isActive('his')" @click="onHistoryTaskClick()"><a href="javascript:;">已完成任务</a></li>
 							</ul><br>
 
 							<div class="input-group search-area">
@@ -131,8 +131,9 @@
 								</tbody>
 							</table>
 							<div class="clearfix"><br></div>
-							<div id="page"></div>
-							<div id="hispage"></div>
+							<div id="page">
+								<page loadfunc="load" loadcb="loadCallback"></page>
+							</div>
 							<div id="creatTask" class="creatTask">
 								<h4 class="channel-title">新建任务</h4>
 								<div class="creattaskwrap">
@@ -186,7 +187,7 @@
 										<div class="form-group">
 											<label class="col-sm-2 control-label">接收主机标识</label>
 											<div class="col-sm-10">
-												<select class="form-control" id="taskDestId_config" name="taskDestId_config" v-for="dest in taskDestHostList">
+												<select class="form-control" id="taskDestId_config" name="taskDestId_config">
 													<option value="0" selected="selected">接收主机标识</option>
 													<option value="45" label="tj">tj</option>
 												</select>
@@ -217,17 +218,18 @@
 		</div>
 	</div>
 </div>
-	<script type="text/javascript" src="../public/libs/jquery/dist/jquery.min.js"></script>
-	<script type="text/javascript" src="../public/libs/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="../public/libs/vue/dist/vue.js"></script>
-	<script type="text/javascript" src="../public/libs/vue/dist/vue-resource.js"></script>
-	<script type="text/javascript" src="../public/libs/vue/dist/vuex.js"></script>	
-	<script type="text/javascript" src="../public/js/jquery.cookie.js"></script>
-	<script type="text/javascript" src="../public/js/loginmanager.js"></script>
+	<script src="../public/libs/jquery/dist/jquery.min.js"></script>
+	<script src="../public/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="../public/libs/vue/dist/vue.js"></script>
+	<script src="../public/libs/vue/dist/vue-resource.js"></script>
+	<script src="../public/libs/vue/dist/vuex.js"></script>	
+	<script src="../public/js/jquery.cookie.js"></script>
+	<script src="../public/js/loginmanager.js"></script>
 	<!-- common end  -->
-	<script type="text/javascript" src="./store.js"></script>
-	<script type="text/javascript" src="./tasklist.js"></script>
-	<script type="text/javascript" src="./main.js"></script>
+	<script src="./page.component.js"></script>
+	<script src="./store.js"></script>
+	<script src="./tasklist.js"></script>
+	<script src="./main.js"></script>
 </body>
 </html>
 

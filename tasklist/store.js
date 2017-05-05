@@ -11,10 +11,16 @@
         mutations : {
             updateTaskList : function(state,list) {
                 var l = formatList(list);
-                state.taskList = list;
+                state.taskList = l;
             },
             updatePage : function(state, page) {
                 state.taskPage = page;
+            },
+            updateCurrentPage : function(state,page) {
+                state.currentPage = page;
+            },
+            updateType : function(state,isHis) {
+                state.isHistory = isHis;
             }
         },
         actions : {        
@@ -23,6 +29,12 @@
             },
             updatePage : function(context, page) {
                 context.commit('updatePage',page);
+            },
+            updateCurrentPage : function(context,page) {
+                context.commit('updateCurrentPage', page);
+            },
+            updateType : function(context,isHis) {
+                context.commit('updateType', isHis);
             }
         }
 
@@ -43,7 +55,6 @@
                 operationType : taskItem['operationType']
             });
         };
-        console.log(res)
         return res;
     }
 

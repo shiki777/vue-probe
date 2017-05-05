@@ -13,13 +13,43 @@ Vue.component('taskpanel',{
                                         <div class="form-group">\
                                             <label for="f_taskType" class="col-sm-2 control-label">任务类型</label>\
                                             <div class="col-sm-10">\
-                                                <select class="form-control">\
-                                                    <option value="">选择任务类型</option>\
+                                                <select class="form-control" v-model="taskType">\
                                                     <option value="hls" label="hls">hls</option>\
                                                     <option value="flv" label="flv">flv</option>\
                                                     <option value="rtmp" label="rtmp">rtmp</option>\
                                                     <option value="ping" label="ping">ping</option>\
+                                                    <option value="traceroute" label="traceroute">traceroute</option>\
                                                 </select>\
+                                            </div>\
+                                        </div>\
+                                        <div class="form-group" :style="taskItemStyle(\'stream\')">\
+                                            <label for="f_taskappid" class="col-sm-2 control-label">应用标识</label>\
+                                            <div class="col-sm-10">\
+                                                <input type="text" class="form-control" id="f_taskappid" placeholder="应用标识">\
+                                            </div>\
+                                        </div>\
+                                        <div class="form-group" :style="taskItemStyle(\'stream\')">\
+                                            <label for="f_tasksname" class="col-sm-2 control-label">流名</label>\
+                                            <div class="col-sm-10">\
+                                                <input type="text" class="form-control" id="f_tasksname" placeholder="流名">\
+                                            </div>\
+                                        </div>\
+                                        <div class="form-group" :style="taskItemStyle(\'ping\')">\
+                                            <label for="f_tasksize" class="col-sm-2 control-label">包大小</label>\
+                                            <div class="col-sm-10">\
+                                                <input type="text" class="form-control" id="f_tasksize" placeholder="包大小">\
+                                            </div>\
+                                        </div>\
+                                        <div class="form-group" :style="taskItemStyle(\'ping\')">\
+                                            <label for="f_tasktap" class="col-sm-2 control-label">ping包之间的间隔 -i(毫秒)</label>\
+                                            <div class="col-sm-10">\
+                                                <input type="text" class="form-control" id="f_tasktap" placeholder="ping包之间的间隔 -i(毫秒)">\
+                                            </div>\
+                                        </div>\
+                                        <div class="form-group" :style="taskItemStyle(\'ping\')">\
+                                            <label for="f_tasktap2" class="col-sm-2 control-label">对同一个目标的ping包间隔 -p(毫秒)</label>\
+                                            <div class="col-sm-10">\
+                                                <input type="text" class="form-control" id="f_tasktap2" placeholder="对同一个目标的ping包间隔 -p(毫秒)">\
                                             </div>\
                                         </div>\
                                         <div class="form-group">\
@@ -73,7 +103,8 @@ Vue.component('taskpanel',{
         return {
             show : true,
             destList : [],
-            destId :  'empty' /*接收主机标识id*/ 
+            destId :  'empty', /*接收主机标识id*/
+            taskType : 'hls' /*任务类型*/
         }
     },
     computed : {
@@ -102,6 +133,22 @@ Vue.component('taskpanel',{
                 .then(function(data) {
                     self.destList = formatDestList(data.body.taskDestList);
                 })      
+        },
+        /*根据选择的任务类型，需要填写的字段也不同，该属性用于控制显示填写字段*/
+        taskItemStyle : function(itemType) {
+            if(this.taskType == 'hls' || this.taskType == 'flv' || this.taskType == 'rtmp'){
+                if(itemType == 'stream') {
+                    return 'display : block;';
+                } else {
+                    return 'display : none;'
+                }
+            } else {
+                if(itemType == 'ping'){
+                    return 'display : block;'
+                } else {
+                    return 'display : none;'
+                }
+            }
         }
     },
     created : function() {

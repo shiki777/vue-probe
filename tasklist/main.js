@@ -5,15 +5,53 @@
     var vm;
 
     function main() {
+        initPlugin();
         snailtask.load(taskStore.state.taskName)
         .then(function(data) {
             createVm();
+            initPlugin();
             taskStore.commit('updateTaskList',data.body.taskList);
             taskStore.commit('updatePage',data.body.indexCounts);
         })
         .catch(function(err) {
             console.log(err)
         })
+    }
+
+    function initPlugin() {
+        var startTime = moment();
+        var endTime = moment().endOf('day');
+        var startOnlyTime =moment();
+
+        $('input[name="task_time2"]').daterangepicker({
+            timePicker:true,
+            timePicker24Hour:true,
+            timePickerSeconds: true,
+            timePickerIncrement: 1,
+            minDate : moment(),
+            locale: {
+                format: 'MM/DD/YYYY HH:mm:ss'
+            },
+            autoApply: true,
+        }, function(start, end){        
+            startTime=start;
+            endTime = end;
+        });
+
+        $('input[name="task_time3"]').daterangepicker({
+            singleDatePicker: true,
+            timePicker:true,
+            timePicker24Hour:true,
+            timePickerSeconds: true,
+            timePickerIncrement: 1,
+            minDate : moment(),
+            locale: {
+                format: 'MM/DD/YYYY HH:mm:ss'
+            },
+            autoApply: true,
+        }, function(start, end){        
+            startOnlyTime=start;            
+        }); 
     }
 
     function createVm() {

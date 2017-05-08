@@ -75,10 +75,16 @@ Vue.component('taskpanel',{
                                                 </select>\
                                             </div>\
                                         </div>\
-                                        <div class="form-group" :style="isRuntypeShow">\
-                                        <label class="col-sm-2 control-label" for="task_time">时间选择</label>\
+                                        <div class="form-group" :style="isRuntypeShow(3)">\
+                                        <label class="col-sm-2 control-label" for="task_time3">运行开始时间</label>\
                                             <div class="col-sm-10">\
-                                                <input type="text" class="form-control" id="task_time" placeholder="时间选择">\
+                                                <input type="text" class="form-control" id="task_time3" name="task_time3" placeholder="运行开始时间" value="">\
+                                            </div>\
+                                        </div>\
+                                        <div class="form-group" :style="isRuntypeShow(2)">\
+                                        <label class="col-sm-2 control-label" for="task_time2">运行开始时间-运行结束时间</label>\
+                                            <div class="col-sm-10">\
+                                                <input type="text" class="form-control" id="task_time2" name="task_time2" placeholder="运行开始时间-运行结束时间" value="">\
                                             </div>\
                                         </div>\
                                         <div class="form-group">\
@@ -109,7 +115,7 @@ Vue.component('taskpanel',{
             show : true,
             destList : [],
             destId :  'empty', /*接收主机标识id*/
-            taskRuntype : '0', /*任务运行类型*/
+            taskRuntype : '2', /*任务运行类型*/
             taskType : 'hls' /*任务类型*/
         }
     },
@@ -122,9 +128,6 @@ Vue.component('taskpanel',{
         },
         title : function() {
             return this.$store.state.isEdit ? '编辑任务' : '新建任务';
-        },
-        isRuntypeShow : function() {
-            return this.taskRuntype > 1 ? 'display : block' : 'display : none;'
         }
     },    
     methods : {
@@ -161,7 +164,11 @@ Vue.component('taskpanel',{
                     return 'display : none;'
                 }
             }
-        }
+        },
+        isRuntypeShow : function(type) {
+            return this.taskRuntype  == type ? 'display : block' : 'display : none;'
+        }        
+
     },
     created : function() {
         var self = this;

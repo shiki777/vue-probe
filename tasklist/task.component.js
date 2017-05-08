@@ -1,6 +1,6 @@
 Vue.component('taskpanel',{
     template : '                            <div class="creatTask" :style="showStyle">\
-                                <h4 class="channel-title">新建任务</h4>\
+                                <h4 class="channel-title">{{title}}</h4>\
                                 <div class="creattaskwrap">\
                                     <form class="form-horizontal">\
                                         <br>\
@@ -87,7 +87,7 @@ Vue.component('taskpanel',{
                                         <div class="form-group">\
                                             <label for="taskDestIP_config" class="col-sm-2 control-label">接收方主机IP</label>\
                                             <div class="col-sm-10">\
-                                                <input type="text" class="form-control" id="taskDestIP_config" placeholder="接收方主机IP":readonly="ipReadonly">\
+                                                <input type="text" class="form-control" id="taskDestIP_config" placeholder="接收方主机IP">\
                                             </div>\
                                         </div>\
                                         <br>\
@@ -112,7 +112,10 @@ Vue.component('taskpanel',{
             return this.show ? 'display : block;' : 'display : none;'
         },
         ipReadonly : function() {
-            return this.destId == 'epmty' ? false :true;
+            return this.destId == 'empty' ? 'xxx' : 'readonly';
+        },
+        title : function() {
+            return this.$store.state.isEdit ? '编辑任务' : '新建任务';
         }
     },    
     methods : {

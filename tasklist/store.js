@@ -6,7 +6,8 @@
             taskPage : 1, /*任务页数*/
             currentPage : 1, /*任务页数*/
             taskName : '', /*任务名*/
-            isHistory : false /*是否读取历史记录*/
+            isHistory : false, /*是否读取历史记录*/
+            isEdit : false /*是否编辑任务，否则为新建任务*/
         },
         mutations : {
             updateTaskList : function(state,list) {
@@ -24,6 +25,9 @@
             },
             updateTaskName : function(state, name) {
                 state.taskName = name;
+            },
+            updateEdit : function(state, isEdit) {
+                state.isEdit = isEdit;
             }
         },
         actions : {        
@@ -41,6 +45,9 @@
             },
             updateTaskName : function(context,name) {
                 context.commit('updateTaskName', name);
+            },
+            updateEdit : function(context, isEdit) {
+                context.commit('updateEdit', isEdit);
             }
         }
 

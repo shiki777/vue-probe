@@ -1,6 +1,6 @@
 (function() {
 
-    var BASE_URL = 'http://10.220.10.60:8087';
+    var BASE_URL = 'http://10.220.10.60:8089';
     var CURRENT_URL = BASE_URL + '/probe-service/task/taskList';
     var HISTORY_URL = BASE_URL + '/probe-service/task/historyTaskList';
     var PAGE_SIZE  = 10;

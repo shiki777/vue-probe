@@ -1,6 +1,6 @@
 (function() {
 
-  var baseUrl = 'http://10.220.10.60:8087';
+  var baseUrl = 'http://10.220.10.60:8089';
   var urls = {
     loginUrl : baseUrl + '/probe-service/rest/login/query.do',
     logoutUrl : baseUrl +  '/probe-service/rest/logout/query.do'
@@ -21,7 +21,11 @@ var loginManage = {
       type: 'POST',
       dataType: 'json',
       contentType:"application/json; charset=utf-8",
-      data: JSON.stringify(reqData)
+      data: JSON.stringify(reqData),
+      xhrFields: {
+        withCredentials: true
+      },
+      crossDomain: true
     })
     .done(function(res) {
       var expiresDate= new Date();
@@ -38,12 +42,20 @@ var loginManage = {
     });
   },
   logout:function(){
-    $.get(urls.logoutUrl, function(res) {
+    $.ajax({
+      url: urls.logoutUrl,
+      type: 'get',
+      xhrFields: {
+        withCredentials: true
+      },
+      crossDomain: true,
+    })    
+    .done(function(res) {
       if(res.status==0){
         usecookies.delCookie(COOKIE_NAME);
         window.location.href = "/probe/login/login.html";
-      }
-    });
+      }      
+    })
   },
   chack:function(){
     var hosturl = window.location.href.indexOf("login");

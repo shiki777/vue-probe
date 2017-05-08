@@ -7,7 +7,7 @@ Vue.component('taskpanel',{
                                         <div class="form-group">\
                                             <label for="f_taskName" class="col-sm-2 control-label">任务名</label>\
                                             <div class="col-sm-10">\
-                                                <input type="text" class="form-control" id="f_taskName" placeholder="任务名">\
+                                                <input type="text" class="form-control" id="f_taskName" placeholder="任务名" v-model="taskName">\
                                             </div>\
                                         </div>\
                                         <div class="form-group">\
@@ -25,43 +25,43 @@ Vue.component('taskpanel',{
                                         <div class="form-group" :style="taskItemStyle(\'stream\')">\
                                             <label for="f_taskappid" class="col-sm-2 control-label">应用标识</label>\
                                             <div class="col-sm-10">\
-                                                <input type="text" class="form-control" id="f_taskappid" placeholder="应用标识">\
+                                                <input type="text" class="form-control" id="f_taskappid" placeholder="应用标识" v-model="taskAppid">\
                                             </div>\
                                         </div>\
                                         <div class="form-group" :style="taskItemStyle(\'stream\')">\
                                             <label for="f_tasksname" class="col-sm-2 control-label">流名</label>\
                                             <div class="col-sm-10">\
-                                                <input type="text" class="form-control" id="f_tasksname" placeholder="流名">\
+                                                <input type="text" class="form-control" id="f_tasksname" placeholder="流名" v-model="taskStreamname">\
                                             </div>\
                                         </div>\
                                         <div class="form-group" :style="taskItemStyle(\'ping\')">\
                                             <label for="f_tasksize" class="col-sm-2 control-label">包大小</label>\
                                             <div class="col-sm-10">\
-                                                <input type="text" class="form-control" id="f_tasksize" placeholder="包大小">\
+                                                <input type="number" class="form-control" id="f_tasksize" placeholder="包大小" v-model="taskSize">\
                                             </div>\
                                         </div>\
                                         <div class="form-group" :style="taskItemStyle(\'ping\')">\
                                             <label for="f_tasktap" class="col-sm-2 control-label">ping包之间的间隔 -i(毫秒)</label>\
                                             <div class="col-sm-10">\
-                                                <input type="text" class="form-control" id="f_tasktap" placeholder="ping包之间的间隔 -i(毫秒)">\
+                                                <input type="number" class="form-control" id="f_tasktap" placeholder="ping包之间的间隔 -i(毫秒)" v-model="tasktap1">\
                                             </div>\
                                         </div>\
                                         <div class="form-group" :style="taskItemStyle(\'ping\')">\
                                             <label for="f_tasktap2" class="col-sm-2 control-label">对同一个目标的ping包间隔 -p(毫秒)</label>\
                                             <div class="col-sm-10">\
-                                                <input type="text" class="form-control" id="f_tasktap2" placeholder="对同一个目标的ping包间隔 -p(毫秒)">\
+                                                <input type="number" class="form-control" id="f_tasktap2" placeholder="对同一个目标的ping包间隔 -p(毫秒)" v-model="tasktap2">\
                                             </div>\
                                         </div>\
                                         <div class="form-group">\
                                             <label for="f_taskPing" class="col-sm-2 control-label">ping持续时间</label>\
                                             <div class="col-sm-10">\
-                                                <input type="number" class="form-control" id="f_taskPing" placeholder="ping持续时间">\
+                                                <input type="number" class="form-control" id="f_taskPing" placeholder="ping持续时间" v-model="taskDuration">\
                                             </div>\
                                         </div>\
                                         <div class="form-group">\
                                             <label for="f_taskUdp" class="col-sm-2 control-label">UDP上报地址</label>\
                                             <div class="col-sm-10">\
-                                                <input type="text" class="form-control" id="f_taskUdp" placeholder="UDP上报地址">\
+                                                <input type="text" class="form-control" id="f_taskUdp" placeholder="UDP上报地址" v-model="taskUdp">\
                                             </div>\
                                         </div>\
                                         <div class="form-group">\
@@ -99,7 +99,7 @@ Vue.component('taskpanel',{
                                         <div class="form-group">\
                                             <label for="taskDestIP_config" class="col-sm-2 control-label">接收方主机IP</label>\
                                             <div class="col-sm-10">\
-                                                <input type="text" class="form-control" id="taskDestIP_config" placeholder="接收方主机IP":readonly="ipReadonly">\
+                                                <input type="text" class="form-control" id="taskDestIP_config" placeholder="接收方主机IP":readonly="ipReadonly" v-model="taskIp">\
                                             </div>\
                                         </div>\
                                         <br>\
@@ -116,7 +116,16 @@ Vue.component('taskpanel',{
             destList : [],
             destId :  'empty', /*接收主机标识id*/
             taskRuntype : '2', /*任务运行类型*/
-            taskType : 'hls' /*任务类型*/
+            taskType : 'hls', /*任务类型*/
+            taskName : '', /*任务名*/
+            taskAppid : '', /*任务应用标识*/
+            taskStreamname : '', /*任务流名*/
+            taskSize : '', /*任务包大小*/
+            tasktap1 : '', /*任务ping包间隔*/
+            tasktap2 : '', /*任务同一目标ping包间隔*/
+            taskUdp : '', /*任务UDP上报地址*/
+            taskIp : '', /*任务接受主机IP*/
+            taskDuration : ''/*任务ping持续时间*/
         }
     },
     computed : {

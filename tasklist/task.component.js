@@ -76,10 +76,16 @@ Vue.component('taskpanel',{
                                             </div>\
                                         </div>\
                                         <div class="form-group">\
+                                        <label class="col-sm-2 control-label" for="task_time">时间选择</label>\
+                                            <div class="col-sm-10">\
+                                                <input type="text" class="form-control" id="task_time" placeholder="时间选择">\
+                                            </div>\
+                                        </div>\
+                                        <div class="form-group">\
                                             <label class="col-sm-2 control-label">接收主机标识</label>\
                                             <div class="col-sm-10">\
                                                 <select class="form-control" id="taskDestId_config" name="taskDestId_config" v-model="destId">\
-                                                    <option value="epmty">接收主机标识</option>\
+                                                    <option value="empty">接收主机标识</option>\
                                                     <option :value="dest.name" :label="dest.name" v-for="dest in destList">{{dest.name}}</option>\
                                                 </select>\
                                             </div>\
@@ -87,12 +93,11 @@ Vue.component('taskpanel',{
                                         <div class="form-group">\
                                             <label for="taskDestIP_config" class="col-sm-2 control-label">接收方主机IP</label>\
                                             <div class="col-sm-10">\
-                                                <input type="text" class="form-control" id="taskDestIP_config" placeholder="接收方主机IP">\
+                                                <input type="text" class="form-control" id="taskDestIP_config" placeholder="接收方主机IP":readonly="ipReadonly">\
                                             </div>\
                                         </div>\
                                         <br>\
                                         <div class="col-sm-offset-2">\
-                                            <button class="btn btn-primary" id="J_btn_newTask">确定</button>\
                                             <button class="btn btn-primary" type="reset">下一步</button>\
                                             <!-- <button class="btn btn-primary" type="reset" id="J_btn_cancel">取消</button> -->\
                                         </div>\
@@ -112,7 +117,7 @@ Vue.component('taskpanel',{
             return this.show ? 'display : block;' : 'display : none;'
         },
         ipReadonly : function() {
-            return this.destId == 'empty' ? 'xxx' : 'readonly';
+            return this.destId == 'empty' ? false : 'readonly';
         },
         title : function() {
             return this.$store.state.isEdit ? '编辑任务' : '新建任务';

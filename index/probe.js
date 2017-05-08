@@ -1,6 +1,6 @@
 (function() {
 
-    var BASE_URL = 'http://10.220.10.60:8087';
+    var BASE_URL = 'http://10.220.10.60:8089';
     var PROBE_URL = BASE_URL + '/probe-service/probe/probeList';
     var GROUP_URL = BASE_URL + '/probe-service/probeOrg/probeListByOrgId';
     var PAGE_SIZE  = 10;

@@ -67,7 +67,7 @@ Vue.component('taskpanel',{
                                         <div class="form-group">\
                                             <label for="f_taskRunType" class="col-sm-2 control-label">任务运行类型</label>\
                                             <div class="col-sm-10">\
-                                                <select class="form-control" id="f_taskRunType">\
+                                                <select class="form-control" id="f_taskRunType" v-model="taskRuntype">\
                                                     <option value="0" selected="selected">选择任务运行类型</option>\
                                                     <option value="1" label="立即执行">立即执行</option>\
                                                     <option value="2" label="定时执行(运行开始时间-运行结束时间)">定时执行(运行开始时间-运行结束时间)</option>\
@@ -75,7 +75,7 @@ Vue.component('taskpanel',{
                                                 </select>\
                                             </div>\
                                         </div>\
-                                        <div class="form-group">\
+                                        <div class="form-group" :style="isRuntypeShow">\
                                         <label class="col-sm-2 control-label" for="task_time">时间选择</label>\
                                             <div class="col-sm-10">\
                                                 <input type="text" class="form-control" id="task_time" placeholder="时间选择">\
@@ -109,6 +109,7 @@ Vue.component('taskpanel',{
             show : true,
             destList : [],
             destId :  'empty', /*接收主机标识id*/
+            taskRuntype : '0', /*任务运行类型*/
             taskType : 'hls' /*任务类型*/
         }
     },
@@ -121,6 +122,9 @@ Vue.component('taskpanel',{
         },
         title : function() {
             return this.$store.state.isEdit ? '编辑任务' : '新建任务';
+        },
+        isRuntypeShow : function() {
+            return this.taskRuntype > 1 ? 'display : block' : 'display : none;'
         }
     },    
     methods : {

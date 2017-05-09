@@ -2,7 +2,7 @@ Vue.component('taskpanel',{
     template : '                            <div class="creatTask" :style="showStyle">\
                                 <h4 class="channel-title">{{title}}</h4>\
                                 <div class="creattaskwrap">\
-                                    <form class="form-horizontal">\
+                                    <form class="form-horizontal" v-if="step == 1">\
                                         <br>\
                                         <div class="form-group">\
                                             <label for="f_taskName" class="col-sm-2 control-label">任务名</label>\
@@ -114,12 +114,15 @@ Vue.component('taskpanel',{
                                             <!-- <button class="btn btn-primary" id="J_btn_cancel">取消</button> -->\
                                         </div>\
                                     </form>\
+                                    <div class="step2-wrap" v-if="step == 2">\
+                                    <probelist></probelist>\
+                                    </div>\
                                 </div>\
                             </div>',
     data : function() {
         return {
             show : true,
-            step : 1,
+            step : 2,
             destList : [],
             destId :  'empty', /*接收主机标识id*/
             taskRuntype : '2', /*任务运行类型*/
@@ -134,6 +137,9 @@ Vue.component('taskpanel',{
             taskIp : '', /*任务接受主机IP*/
             taskDuration : ''/*任务ping持续时间*/
         }
+    },
+    component : {
+        probelist : 'probelist'
     },
     computed : {
         showStyle : function() {
@@ -269,8 +275,9 @@ Vue.component('taskpanel',{
         },
         nextStep : function(e) {
             e.preventDefault();
-            var res = this.validFisrtStep();
-            console.log(res);
+            if(this.validFisrtStep()){
+                this.step = 2;
+            }
         },
         /*验证第一步表单是否达标*/
         validFisrtStep : function() {

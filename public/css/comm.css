@@ -82,7 +82,7 @@ body{font-family:"Helvetica Neue","Luxi Sans","DejaVu Sans",Tahoma,"Hiragino San
 .loadingtr td{height:300px;vertical-align:middle;line-height:300px!important;}
 #tasklist{position:relative;height:100%;}
 .creatTask{position:absolute;top:0;left:0;right:0;background-color:#fff;height:100%;width:100%;z-index:8;display:none;}
-.creattaskwrap{width:700px;margin:20px auto;}
+.creattaskwrap{width:900px;margin:20px auto;}
 #page,#hispage{height:40px;display:table;margin:10px auto 0;}
 .fl{float:left;}
 .fr{float:right;}

@@ -42,7 +42,7 @@ Vue.component('taskpanel',{
                                             <div class="col-sm-8">\
                                                 <input type="number" class="form-control" id="f_tasksize" placeholder="包大小" v-model="taskSize">\
                                             </div>\
-                                            <div class="col-sm-2 form-warning">包大小不能小于24</div>\
+                                            <div class="col-sm-2 form-warning" v-if="validateData.taskSizeError">{{validateData.taskSizeError}}</div>\
                                         </div>\
                                         <div class="form-group" :style="taskItemStyle(\'ping\')">\
                                             <label for="f_tasktap" class="col-sm-2 control-label">ping包之间的间隔 -i(毫秒)</label>\
@@ -74,13 +74,11 @@ Vue.component('taskpanel',{
                                             <label for="f_taskRunType" class="col-sm-2 control-label">任务运行类型</label>\
                                             <div class="col-sm-8">\
                                                 <select class="form-control" id="f_taskRunType" v-model="taskRuntype">\
-                                                    <option value="0" selected="selected">选择任务运行类型</option>\
                                                     <option value="1" label="立即执行">立即执行</option>\
                                                     <option value="2" label="定时执行(运行开始时间-运行结束时间)">定时执行(运行开始时间-运行结束时间)</option>\
                                                     <option value="3" label="定时执行(运行开始时间)">定时执行(运行开始时间)</option>\
                                                 </select>\
                                             </div>\
-                                            <div class="col-sm-2 form-warning">请选择任务运行类型</div>\
                                         </div>\
                                         <div class="form-group" :style="isRuntypeShow(3)">\
                                         <label class="col-sm-2 control-label" for="task_time3">运行开始时间</label>\
@@ -108,11 +106,11 @@ Vue.component('taskpanel',{
                                             <div class="col-sm-8">\
                                                 <input type="text" class="form-control" id="taskDestIP_config" placeholder="接收方主机IP":readonly="ipReadonly" v-model="taskIp">\
                                             </div>\
-                                            <div class="col-sm-2 form-warning">接收方主机IP不可为空</div>\
+                                            <div class="col-sm-2 form-warning" v-if="validateData.taskIpError">接收方主机IP不可为空</div>\
                                         </div>\
                                         <br>\
                                         <div class="col-sm-offset-2">\
-                                            <button class="btn btn-primary">下一步</button>\
+                                            <button class="btn btn-primary" @click="nextStep($event)">下一步</button>\
                                             <!-- <button class="btn btn-primary" id="J_btn_cancel">取消</button> -->\
                                         </div>\
                                     </form>\
@@ -134,8 +132,7 @@ Vue.component('taskpanel',{
             tasktap2 : '', /*任务同一目标ping包间隔*/
             taskUdp : '', /*任务UDP上报地址*/
             taskIp : '', /*任务接受主机IP*/
-            taskDuration : '',/*任务ping持续时间*/
-            formstate  : {}
+            taskDuration : ''/*任务ping持续时间*/
         }
     },
     computed : {
@@ -155,7 +152,9 @@ Vue.component('taskpanel',{
                 appidError : false,
                 streamnameError : false,
                 taskDurationError : false,
-                taskUdpError : false
+                taskUdpError : false,
+                taskIpError : false,
+                taskSizeError : false
             }
         }
     },    
@@ -202,6 +201,22 @@ Vue.component('taskpanel',{
                 this.validateData.taskUdpError = false;
             } else {
                 this.validateData.taskUdpError = 'UDP上报格式不正确';
+            }
+        },
+        taskIp : function(v) {
+            if(!v){
+                this.validateData.taskIpError = true;
+            } else {
+                this.validateData.taskIpError = false;
+            }
+        },
+        taskSize : function(v) {
+            if(!v){
+                this.validateData.taskSizeError = '包大小不可为空';
+            } else if (v < 24){
+                this.validateData.taskSizeError = '包大小不能小于24'
+            } else {
+                this.validateData.taskSizeError = false;
             }
         }
     },
@@ -251,8 +266,59 @@ Vue.component('taskpanel',{
         },
         isRuntypeShow : function(type) {
             return this.taskRuntype  == type ? 'display : block' : 'display : none;'
-        }        
-
+        },
+        nextStep : function(e) {
+            e.preventDefault();
+            var res = this.validFisrtStep();
+            console.log(res);
+        },
+        /*验证第一步表单是否达标*/
+        validFisrtStep : function() {
+            var validOK = true;
+            /*这里的为空判断是为用户直接提交坐测试的，若有过更改的可以直接从validateData中拿错误*/
+            if(!this.taskName){
+                this.validateData.nameError = true;
+                validOK = false;
+            }          
+            if(!this.taskDuration){
+                this.validateData.taskDurationError = true;
+                validOK = false;
+            }
+            if(!this.taskUdp){
+                this.validateData.taskUdpError = 'UDP上报地址不可为空';
+                validOK = false;
+            }
+            /*判断格式问题*/
+            if(this.validateData.taskUdpError) {
+                validOK = false;
+            }
+            if(!this.taskIp){
+                this.validateData.taskIpError = true;
+                validOK = false;
+            }                
+            /*根据任务类型有不同的字段验证*/    
+            if(this.taskType == 'hls' || this.taskType == 'flv' || this.taskType == 'rtmp'){
+                if(!this.taskAppid){
+                    this.validateData.appidError = true;
+                    validOK = false;
+                }
+                if(!this.taskStreamname){
+                    this.validateData.streamnameError = true;
+                    validOK = false;
+                }
+            } else {
+                if(!this.taskSize){
+                    this.validateData.taskSizeError = '包大小不可为空';
+                    validOK = false;
+                }
+                if(this.validateData.taskSizeError){
+                    validOK = false;
+                }
+            }
+            /*强制刷新UI，我也不知道为什么vue不更新UI，是因为数据放在computed里了么*/
+            this.$forceUpdate();
+            return validOK;
+        }   
     },
     created : function() {
         var self = this;

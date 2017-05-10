@@ -1,5 +1,7 @@
 Vue.component('probelist',{
-    template : '<div><table class="table table-striped table-bordered table-hover table-prolist" id="tableDada">\
+    template : '<div>\
+    <div class="input-group search-area"><input type="text" placeholder="搜索探针..." id="searchQuery" class="form-control" v-model="probeName"> <span class="input-group-btn"><button type="button" id="J_searchBtn" data-searchkey="" class="btn btn-default" @click="onSearchClick()">查找</button></span></div>\
+    <table class="table table-striped table-bordered table-hover table-prolist" id="tableDada">\
     <thead>\
     <tr><th>编号</th><th>探针名称</th><th>最近运行时间</th><th>IP地址</th><th>地区</th><th>版本</th></tr>\
     </thead>\
@@ -27,7 +29,7 @@ Vue.component('probelist',{
             PROBE_URL : '/probe-service/probe/probeList',
             probeName : '',
             index : 0,
-            size : 10
+            size : 1
         }
     },
     methods : {
@@ -45,10 +47,16 @@ Vue.component('probelist',{
                 })
         },
         isCurrent : function(n) {
-
+            return n == this.index + 1 ? 'activP' : '';
         },
         onPageClick : function(n) {
-
+            var self = this;
+            this.index = n - 1;
+            this.load();
+        },
+        onSearchClick : function() {
+            this.index = 0;
+            this.load();
         },
         formatList : function(list) {
             var l = list.length;

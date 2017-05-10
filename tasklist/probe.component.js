@@ -1,82 +1,211 @@
-Vue.component('probelist',{
-    template : '<div>\
-    <div class="input-group search-area"><input type="text" placeholder="搜索探针..." id="searchQuery" class="form-control" v-model="probeName"> <span class="input-group-btn"><button type="button" id="J_searchBtn" data-searchkey="" class="btn btn-default" @click="onSearchClick()">查找</button></span></div>\
-    <table class="table table-striped table-bordered table-hover table-prolist" id="tableDada">\
-    <thead>\
-    <tr><th>编号</th><th>探针名称</th><th>最近运行时间</th><th>IP地址</th><th>地区</th><th>版本</th></tr>\
-    </thead>\
-    <tbody>\
-    <tr v-for="(probe,index) in list">\
-    <td>{{index + 1}}</td>\
-    <td>{{probe.name}}</td>\
-    <td>{{probe.time}}</td>\
-    <td>{{probe.ip}}</td>\
-    <td>{{probe.area}}</td>\
-    <td>{{probe.version}}</td>\
-    </tr>\
-    </tbody>\
-    </table>\
-    <div id="page">\
-    <ul class="pagingUl">\
-    <li v-for="n in pageNum"><a href="javascript:" :class="isCurrent(n)" @click="onPageClick(n)">{{n}}</a></li>\
-    </ul>\
-    </div></div>',
-    data : function() {
+Vue.component('probelist', {
+    template: '<div>\
+        <div class="probe-panel">\
+            <h3>探针选择</h3>\
+            <div class="input-group search-area"><input type="text" placeholder="搜索探针..." id="searchQuery" class="form-control" v-model="probeName"> <span class="input-group-btn"><button type="button" id="J_searchBtn" data-searchkey="" class="btn btn-default" @click="onSearchClick()">查找</button></span></div>\
+            <table class="table table-striped table-bordered table-hover table-prolist" id="tableDada">\
+            <thead>\
+            <tr><th></th><th>编号</th><th>探针名称</th><th>最近运行时间</th><th>IP地址</th><th>地区</th><th>版本</th></tr>\
+            </thead>\
+            <tbody>\
+            <tr v-for="(probe,index) in list">\
+            <td><input type="checkbox" @click="onprobeBoxClick(probe.name)" :value="probe.name" :name="probe.name" :id="probe.name" :checked="isBoxChecked(probe.name)"/></td>\
+            <td>{{index + 1}}</td>\
+            <td>{{probe.name}}</td>\
+            <td>{{probe.time}}</td>\
+            <td>{{probe.ip}}</td>\
+            <td>{{probe.area}}</td>\
+            <td>{{probe.version}}</td>\
+            </tr>\
+            </tbody>\
+            </table>\
+            <div id="page">\
+            <ul class="pagingUl">\
+            <li v-for="n in pageNum"><a  href="javascript:" :class="isCurrent(n)" @click="onPageClick(n)">{{n}}</a></li>\
+            </ul>\
+            </div>\
+        </div>\
+        <div class="group-panel">\
+            <h3>组选择</h3>\
+            <div class="btn-group probe-group" id="probeGroupList">\
+            <div class="btn btn-default group-btn" v-for="g in groups"><input type="checkbox" @click="ongroupBoxClick(g.id)" :value="g.id" :name="g.id" :id="g.id" :checked="isGroupBoxChecked(g.id)"/>{{g.name}}</div>\
+            </div>\
+        </div>\
+        <div class="select-panel">\
+        <h3>已选择探针</h3>\
+        <div class="selected-wrap">\
+            <div class="selected-probe" v-for="p in selectedShowProbes">{{p}}</div>\
+        </div>\
+        </div>\
+    </div>',
+    data: function() {
         return {
-            list : [],
-            pageNum : 1,
-            BASE_URL : 'http://10.220.10.60:8089',
-            PROBE_URL : '/probe-service/probe/probeList',
-            probeName : '',
-            index : 0,
-            size : 1
+            list: [],
+            pageNum: 1,
+            BASE_URL: 'http://10.220.10.60:8089',
+            PROBE_URL: '/probe-service/probe/probeList',
+            GROUP_URL: '/probe-service/org/orgList',
+            probeName: '',
+            index: 0,
+            size: 5,
+            groups: [],
+            selectedProbes : [], /*选中的探针组*/
+            selectedGroups : [] /*选中的组*/
         }
     },
-    methods : {
-        load : function() {
+    computed : {
+        /*显示的已选择探针，由已选择探针和已选择组内的探针组合而成*/
+        selectedShowProbes : function() {
+            var res = [].concat(this.selectedProbes);
+            for(var i = 0; i < this.selectedGroups.length; i++){
+                var gid = this.selectedGroups[i];
+                for(var j = 0; j < this.groups[gid].probes.length; j++){
+                    var p = this.groups[gid].probes[j];
+                    /*这一步把选中的单个探针和组内探针做去重*/
+                    if(res.indexOf(p) < 0){
+                        res.push(p);
+                    }
+                }
+            }
+            return res;
+        }
+    },
+    methods: {
+        /*加载探针列表*/
+        load: function() {
             var requestBody = {
-                hostname : this.probeName,
-                pageIndex : this.index,
-                pageSize : this.size
+                hostname: this.probeName,
+                pageIndex: this.index,
+                pageSize: this.size
             };
             var self = this;
-            Vue.http.post(this.BASE_URL + this.PROBE_URL,requestBody)
-                .then(function(data) {
-                    self.list = self.formatList(data.body.probeList);
-                    self.pageNum = data.body.indexCounts;
-                })
+            Vue.http.post(this.BASE_URL + this.PROBE_URL, requestBody)
+            .then(function(data) {
+                self.list = self.formatList(data.body.probeList);
+                self.pageNum = data.body.indexCounts;
+            });
         },
-        isCurrent : function(n) {
+        /*加载组,暂时不做分页*/
+        loadGroup: function() {
+            var requestBody = {
+                consult: '',
+                pageIndex: 0,
+                pageSize: 20
+            };
+            var self = this;
+            Vue.http.post(this.BASE_URL + this.GROUP_URL, requestBody)
+            .then(function(data) {
+                self.groups = self.formatGroups(data.body.orgList);
+            });
+        },
+        isCurrent: function(n) {
             return n == this.index + 1 ? 'activP' : '';
         },
-        onPageClick : function(n) {
+        onPageClick: function(n) {
             var self = this;
             this.index = n - 1;
             this.load();
         },
-        onSearchClick : function() {
+        onSearchClick: function() {
             this.index = 0;
             this.load();
         },
-        formatList : function(list) {
+        isBoxChecked : function(name) {
+            return this.isProbeSelected(name);
+        },
+        onprobeBoxClick : function(name) {
+            if(this.isProbeSelected(name)){
+                this.removeFromSelectedProbe(name);
+            } else {
+                this.addToSelectedProbe(name);
+            }
+        },
+        /*探针是否被选择*/
+        isProbeSelected : function(name) {
+            if(this.selectedProbes.indexOf(name) >= 0){
+                return true;
+            }
+            return false;
+        },
+        /*把探针加入已选择探针*/
+        addToSelectedProbe : function(name) {
+            this.selectedProbes.push(name);
+        },
+        /*把探针移出已选择探针*/
+        removeFromSelectedProbe : function(name) {
+            var index = this.selectedProbes.indexOf(name);
+            this.selectedProbes.splice(index,1);
+        },
+        /*组是否被选择*/
+        isGroupBoxChecked : function(id) {
+            return this.isGroupSelected(id);
+        },
+        ongroupBoxClick : function(id) {
+            if(this.isGroupSelected(id)){
+                this.removeFromSelectedGroup(id);
+            } else {
+                this.addToSelectedGroup(id);
+            }
+        },
+        /*组是否被选择*/
+        isGroupSelected : function(id) {
+            var flag = false;      
+            for(var i = 0; i < this.selectedGroups.length; i++){
+                var groupid = this.selectedGroups[i];
+                if(groupid == id){
+                    flag = true;
+                }
+            }
+            return flag;
+        },
+        /*把组加入已选择组内*/
+        addToSelectedGroup : function(id) {
+            this.selectedGroups.push(id)
+        },
+        /*把组移出已选择组*/
+        removeFromSelectedGroup : function(id) {
+            var index = this.selectedGroups.indexOf(id);
+            this.selectedGroups.splice(index,1);
+        },
+        formatList: function(list) {
             var l = list.length;
             var res = [];
-            for(var i = 0; i < l; i++){
+            for (var i = 0; i < l; i++) {
                 var probeItem = list[i];
                 res.push({
-                    name : probeItem['hostname'],
-                    time : probeItem['hbtime'],
-                    ip : probeItem['ip'],
-                    area : probeItem['district'],
-                    version : probeItem['version']
+                    name: probeItem['hostname'],
+                    time: probeItem['hbtime'],
+                    ip: probeItem['ip'],
+                    area: probeItem['district'],
+                    version: probeItem['version']
                 });
             };
             return res;
+        },
+        formatGroups: function(groups) {
+            var res = {};
+            for (var i = 0; i < groups.length; i++) {
+                var g = groups[i];
+                res[g.id] = {
+                    id: g.id,
+                    name: g.name,
+                    probes : createData(g.id)
+                };
+            }
+            return res;
         }
     },
-    created : function() {
-        this.load()
+    created: function() {
+        this.load();
+        this.loadGroup();
 
     }
 })
 
+function createData(id) {
+    var res = [];
+    for(var i = 0; i < 3; i++){
+        res.push('probe' + id + i);
+    }
+    return res;
+}

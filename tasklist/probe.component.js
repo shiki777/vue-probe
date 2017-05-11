@@ -32,7 +32,7 @@ Vue.component('probelist', {
             </div>\
         </div>\
         <div class="select-panel">\
-        <h3>已选择探针</h3>\
+        <h3>已选择探针</h3><button class="btn btn-primary" @click="lastStep($event)">上一步</button><button class="btn btn-primary" @click="probeSubmit($event)">提交</button>\
         <div class="selected-wrap">\
             <div class="selected-probe" v-for="p in selectedShowProbes">{{p}}</div>\
         </div>\
@@ -44,7 +44,7 @@ Vue.component('probelist', {
             pageNum: 1,
             BASE_URL: 'http://10.220.10.60:8089',
             PROBE_URL: '/probe-service/probe/probeList',
-            GROUP_URL: '/probe-service/org/orgList',
+            GROUP_URL: '/probe-service/org/orgListWithProbeList',
             probeName: '',
             index: 0,
             size: 5,
@@ -62,8 +62,8 @@ Vue.component('probelist', {
                 for(var j = 0; j < this.groups[gid].probes.length; j++){
                     var p = this.groups[gid].probes[j];
                     /*这一步把选中的单个探针和组内探针做去重*/
-                    if(res.indexOf(p) < 0){
-                        res.push(p);
+                    if(res.indexOf(p.hostname) < 0){
+                        res.push(p.hostname);
                     }
                 }
             }
@@ -71,6 +71,14 @@ Vue.component('probelist', {
         }
     },
     methods: {
+        lastStep : function(e) {
+            e.preventDefault();
+            this.$emit('toStep1');
+        },
+        probeSubmit : function(e) {
+            e.preventDefault();
+            this.$emit('submit');
+        },
         /*加载探针列表*/
         load: function() {
             var requestBody = {
@@ -186,10 +194,10 @@ Vue.component('probelist', {
             var res = {};
             for (var i = 0; i < groups.length; i++) {
                 var g = groups[i];
-                res[g.id] = {
-                    id: g.id,
-                    name: g.name,
-                    probes : createData(g.id)
+                res[g.groupId] = {
+                    id: g.groupId,
+                    name: g.groupName,
+                    probes : g.probeList
                 };
             }
             return res;

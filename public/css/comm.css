@@ -81,7 +81,7 @@ body{font-family:"Helvetica Neue","Luxi Sans","DejaVu Sans",Tahoma,"Hiragino San
 .loadingtr{text-align:center;display:none;}
 .loadingtr td{height:300px;vertical-align:middle;line-height:300px!important;}
 #tasklist{position:relative;height:100%;}
-.creatTask{position:absolute;top:0;left:0;right:0;background-color:#fff;height:100%;width:100%;z-index:8;display:none;}
+.creatTask{position:absolute;top:0;left:0;right:0;background-color:#fff;height:100%;width:100%;z-index:8;}
 .creattaskwrap{width:900px;margin:20px auto;}
 #page,#hispage{height:40px;display:table;margin:10px auto 0;}
 .fl{float:left;}
@@ -100,7 +100,10 @@ th.active .arrow{opacity:1;}
 
 
 .probe-group-dialog{display: none;position: absolute;top:50%;left: 50%;width: 450px;margin:-200px 0 0 -225px;z-index:1041;padding-bottom: 20px;background-color: #fff;border: 1px solid #ccc;border-radius: 6px;box-shadow: 0px 0 8px rgba(0,0,0,.3)}
+.probe-group-dialog.task-dialog {display: block;margin-top: 80px;}
+.task-dialog .form-group {height: 30px;}
 .probe-group-dialog .alert{padding:5px 10px;display: none;}
+.task-dialog.probe-group-dialog .alert {display: block;}
 .probe-group-dialog .control-label{text-align: right;padding-right: 0;line-height: 33px;}
 .group-multiselect{display: none;z-index:1042;position: absolute;top:40%;left: 50%;padding:0 10px 25px 10px;margin:-200px 0 0 -500px;width: 1000px;background-color: #fff;border: 1px solid #ccc;border-radius: 6px;box-shadow: 0px 0 8px rgba(0,0,0,.3)}
 .group-multiselect .multi-option{padding-top: 40px;}
@@ -150,7 +153,7 @@ th.active .arrow{opacity:1;}
 }
 
 .selected-wrap {
-    height: 260px;
+    height: 220px;
     overflow-y : auto;
 }
 

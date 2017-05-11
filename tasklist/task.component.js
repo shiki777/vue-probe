@@ -1,5 +1,5 @@
 Vue.component('taskpanel',{
-    template : '                            <div class="creatTask" :style="showStyle">\
+    template : '                            <div><div class="creatTask" :style="showStyle">\
                                 <h4 class="channel-title">{{title}}</h4>\
                                 <div class="creattaskwrap">\
                                     <form class="form-horizontal" v-if="step == 1">\
@@ -115,9 +115,11 @@ Vue.component('taskpanel',{
                                         </div>\
                                     </form>\
                                     <div class="step2-wrap" v-if="step == 2">\
-                                    <probelist></probelist>\
+                                    <probelist @toStep1="toStep1"></probelist>\
                                     </div>\
                                 </div>\
+                            </div>\
+                            <destconfig></destconfig>\
                             </div>',
     data : function() {
         return {
@@ -139,7 +141,8 @@ Vue.component('taskpanel',{
         }
     },
     component : {
-        probelist : 'probelist'
+        probelist : 'probelist',
+        destconfig : 'destconfig'
     },
     computed : {
         showStyle : function() {
@@ -278,6 +281,9 @@ Vue.component('taskpanel',{
             if(this.validFisrtStep()){
                 this.step = 2;
             }
+        },
+        toStep1 : function() {
+            this.step = 1;
         },
         /*验证第一步表单是否达标*/
         validFisrtStep : function() {

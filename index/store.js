@@ -13,7 +13,8 @@
                 step : 1, /*默认状态是1*/
                 groupName : '',
                 show : false
-            } /*组件弹窗数据*/
+            }, /*组件弹窗数据*/
+            editOriginName : ''/*编辑标识时，老标识名，此标识名不需要通过接口去查重*/
         },
         mutations : {
             updateList : function(state, list) {
@@ -65,6 +66,9 @@
                 if(typeof opt.show == 'boolean'){
                     state.groupPanelData.show = opt.show;
                 }                                                
+            },
+            updateEditOriginName : function(state,name) {
+                state.editOriginName = name;
             }
         },
         actions : {
@@ -97,7 +101,10 @@
             },
             updateGroupPanel : function(context,opt) {
                 context.commit('updateGroupPanel',opt);
-            }         
+            },
+            updateEditOriginName : function(context,name) {
+                context.commit('updateEditOriginName',name);
+            }        
 
         }
 

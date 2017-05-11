@@ -12,7 +12,7 @@ Vue.component('destconfig', {
             <td>{{index + 1}}</td>\
             <td>{{dest.name}}</td>\
             <td>{{dest.ip}}</td>\
-            <td><div class=""><button class="btn btn-default btn-sm" @click="removeDest(dest.id)">删除</button><button class="btn btn-default btn-sm" @click="updateDest(dest.name)">修改</button></div></td>\
+            <td><div class=""><button class="btn btn-default btn-sm" @click="removeDest(dest.id)">删除</button><button class="btn btn-default btn-sm" @click="updateDest(dest.id,dest.name,dest.ip)">修改</button></div></td>\
             </tr>\
             </tbody>\
             </table>\
@@ -65,7 +65,9 @@ Vue.component('destconfig', {
             errMsg : '', /*创建主机标识错误提示*/
             newDestName : '', /*创建主机标识名字*/
             newDestIp : '', /*创建主机标识ip*/
-            step : 1/*创建主机标识步骤*/
+            step : 1,/*创建主机标识步骤*/
+            editId : 0, /*编辑中的id，用于判断是否在编辑*/
+            editOriginName : ''/*编辑标识时，老标识名，此标识名不需要通过接口去查重*/
         }
     },
     computed : {
@@ -142,6 +144,11 @@ Vue.component('destconfig', {
             } else {
                 this.errMsg = '';
             }
+            /*如果是编辑的情况，标识名未变的情况不需要走查重接口*/
+            if(this.editOriginName = this.newDestName){
+                this.step = 2;
+                return;
+            }
             var self = this;
             this.validNameRepeat()
             .then(function(data) {
@@ -201,8 +208,13 @@ Vue.component('destconfig', {
                     alert('删除失败，请检查网络');
                 })
         },
-        updateDest : function(name) {
-
+        updateDest : function(id,name,ip) {
+            this.editId = id;
+            this.newDestIp = ip;
+            this.newDestName = name;
+            this.editOriginName = name;
+            this.step = 2;
+            this.createShow = true;
         },
         createDest : function(id,ip) {
             var CREATE_URL = snailtask.BASE_URL +  '/probe-service/taskDest/taskDestNew'
@@ -228,6 +240,8 @@ Vue.component('destconfig', {
             this.step = 1;
             this.newDestName = '';
             this.newDestIp = '';
+            this.editId = 0;
+            this.editOriginName = '';
         },
         validIp : function() {
             if (this.newDestIp.match(/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(:[0-9]{1,5})?$/)) {

@@ -85,6 +85,9 @@ Vue.component('groups', {
         editGroup : function(id,name,e) {
             /*阻止冒泡*/
             e.stopPropagation();            
+            this.$store.dispatch('updateEditOriginName', name);
+            /*hack vuex在值不变的情况下不会发出通知，当初不用消息总线来通知消息而偷懒用vuex很不明智*/
+            this.$store.dispatch('updateEditGroupid', -1); 
             this.$store.dispatch('updateEditGroupid', id); 
             this.$store.dispatch('updateGroupPanel', {step:2,groupName:name,show:true}); 
             return false;
@@ -215,7 +218,8 @@ Vue.component('group', {
                 return 0;
             }
             this.reset();
-            this.loadSelectedProbes();    
+            this.loadSelectedProbes();   
+            this.groupName = this.$store.state.groupPanelData.groupName;
             return this.$store.state.editGroupid;       
         }
     },
@@ -316,6 +320,12 @@ Vue.component('group', {
                 return;
             }
             var self = this;
+            if(this.$store.state.editGroupid){
+               if(this.groupName == this.$store.state.editOriginName){
+                    this.$store.dispatch('updateGroupPanel',{step : 2});
+                    return;
+               }
+            }
             this.checkGroupName()
             .then(function(data) {
                 /*true代表成功*/
@@ -374,6 +384,7 @@ Vue.component('group', {
                     if(data.body.status == 0){
                         if(type == 'create'){
                             self.$store.dispatch('addGroup',{id : data.body.orgId,name : self.groupName});
+                            this.$store.dispatch('updateEditOriginName','');
                         }
                         self.$store.dispatch('updateGroupPanel',{step : 1,show : false});
                     } else {

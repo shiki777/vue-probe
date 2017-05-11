@@ -8,11 +8,11 @@ Vue.component('destconfig', {
             <tr><th>编号</th><th>主机标识名称</th><th>主机IP</th><th>操作</th></tr>\
             </thead>\
             <tbody>\
-            <tr v-for="(probe,index) in list">\
+            <tr v-for="(dest,index) in list">\
             <td>{{index + 1}}</td>\
-            <td>{{probe.name}}</td>\
-            <td>{{probe.ip}}</td>\
-            <td><div class=""><button class="btn btn-default btn-sm">删除</button><button class="btn btn-default btn-sm">修改</button></div></td>\
+            <td>{{dest.name}}</td>\
+            <td>{{dest.ip}}</td>\
+            <td><div class=""><button class="btn btn-default btn-sm" @click="removeDest(dest.name)">删除</button><button class="btn btn-default btn-sm" @click="updateDest(dest.name)">修改</button></div></td>\
             </tr>\
             </tbody>\
             </table>\
@@ -58,7 +58,7 @@ Vue.component('destconfig', {
     data : function() {
         return {
             show : true, /*控制主机标识配置面板显示*/
-            createShow : true,/*控制创建主机标识面板显示*/
+            createShow : false,/*控制创建主机标识面板显示*/
             index : 0,
             page : 1,
             list : [],
@@ -97,6 +97,29 @@ Vue.component('destconfig', {
                 });
             }
             return res;            
+        },
+        removeDestFromList : function(name) {
+            var index = -1;
+            for(var i = 0; i < this.list.length; i++){
+                if(index == -1 && this.list[i].name == name){
+                    index = i;
+                }
+            }
+            if(index >=0){
+                this.list.splice(index,1);
+            }
+        },
+        updateDestFromList : function(name,ip) {
+            var index = -1;
+            for(var i = 0; i < this.list.length; i++){
+                if(index == -1 && this.list[i].name == name){
+                    index = i;
+                }
+            }
+            if(index >=0){
+                this.list[index].name = name;
+                this.list[index].ip = ip;
+            }
         },
         isCurrent: function(n) {
             return n == this.index + 1 ? 'activP' : '';
@@ -158,6 +181,27 @@ Vue.component('destconfig', {
                 .catch(function() {
                     self.errMsg = '创建失败，请检查网络'
                 })
+        },
+        removeDest : function(name) {
+            var DEL_URL = snailtask.BASE_URL +  '/probe-service/taskDest/taskDestDelete';
+            var requestBody = {
+                destID : name
+            };
+            var self = this;
+            Vue.http.post(DEL_URL,requestBody)
+                .then(function(data) {
+                    if(data.body.status == 0){
+                        self.removeDestFromList(name);
+                    } else {
+                        alert('删除失败，请检查网络');
+                    }
+                })
+                .catch(function() {
+                    alert('删除失败，请检查网络');
+                })
+        },
+        updateDest : function(name) {
+
         },
         createDest : function(id,ip) {
             var CREATE_URL = snailtask.BASE_URL +  '/probe-service/taskDest/taskDestNew'

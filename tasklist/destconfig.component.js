@@ -12,7 +12,7 @@ Vue.component('destconfig', {
             <td>{{index + 1}}</td>\
             <td>{{dest.name}}</td>\
             <td>{{dest.ip}}</td>\
-            <td><div class=""><button class="btn btn-default btn-sm" @click="removeDest(dest.name)">删除</button><button class="btn btn-default btn-sm" @click="updateDest(dest.name)">修改</button></div></td>\
+            <td><div class=""><button class="btn btn-default btn-sm" @click="removeDest(dest.id)">删除</button><button class="btn btn-default btn-sm" @click="updateDest(dest.name)">修改</button></div></td>\
             </tr>\
             </tbody>\
             </table>\
@@ -93,15 +93,16 @@ Vue.component('destconfig', {
             for(var i = 0; i < list.length; i++){
                 res.push({
                     name : list[i].destID,
-                    ip : list[i].destIP
+                    ip : list[i].destIP,
+                    id : list[i].id
                 });
             }
             return res;            
         },
-        removeDestFromList : function(name) {
+        removeDestFromList : function(id) {
             var index = -1;
             for(var i = 0; i < this.list.length; i++){
-                if(index == -1 && this.list[i].name == name){
+                if(index == -1 && this.list[i].id == id){
                     index = i;
                 }
             }
@@ -182,16 +183,16 @@ Vue.component('destconfig', {
                     self.errMsg = '创建失败，请检查网络'
                 })
         },
-        removeDest : function(name) {
+        removeDest : function(id) {
             var DEL_URL = snailtask.BASE_URL +  '/probe-service/taskDest/taskDestDelete';
             var requestBody = {
-                destID : name
+                id : id
             };
             var self = this;
             Vue.http.post(DEL_URL,requestBody)
                 .then(function(data) {
                     if(data.body.status == 0){
-                        self.removeDestFromList(name);
+                        self.removeDestFromList(id);
                     } else {
                         alert('删除失败，请检查网络');
                     }

@@ -123,8 +123,8 @@ Vue.component('taskpanel',{
                             </div>',
     data : function() {
         return {
-            show : true,
-            step : 2,
+            show : false,
+            step : 1,
             destList : [],
             destId :  'empty', /*接收主机标识id*/
             taskRuntype : '2', /*任务运行类型*/

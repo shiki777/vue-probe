@@ -57,8 +57,8 @@ Vue.component('destconfig', {
     </div>',
     data : function() {
         return {
-            show : false, /*控制主机标识配置面板显示*/
-            createShow : false,/*控制创建主机标识面板显示*/
+            show : true, /*控制主机标识配置面板显示*/
+            createShow : true,/*控制创建主机标识面板显示*/
             index : 0,
             page : 1,
             list : [],
@@ -144,9 +144,10 @@ Vue.component('destconfig', {
             } else {
                 this.errMsg = '';
             }
+            var self = this;
             this.createDest(destid,destip)
                 .then(function(data) {
-                    if(data.body.status){
+                    if(data.body.status == 0){
                         self.list.splice(0,0,{name : destid,ip : destip});
                         self.reset();
                         self.createShow = false;

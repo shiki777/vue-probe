@@ -74,6 +74,17 @@
                 }
             },
             methods : {
+                statusMsg : function(status) {
+                    if(status == -1){
+                        return '暂停中';
+                    }
+                    if(status == 1){
+                        return '运行中';
+                    }
+                    if(status == 0){
+                        return '未运行';
+                    }
+                },
                 onCurrentTaskClick : function() {
                     if(this.type == 'cur') return;
                     this.type = 'cur';
@@ -99,6 +110,43 @@
                 },
                 onDestConfigClick : function() {
                     snailtask.messageBus.$emit('showDest', true);
+                },
+                onTaskDel: function(id, name) {
+                    var DEL_URL = snailtask.BASE_URL + '/probe-service/task/taskDelete';
+                    var requestBody = {
+                        taskId : id,
+                        taskName: name
+                    };
+                    var self = this;
+                    Vue.http.post(DEL_URL, requestBody)
+                        .then(function(data) {
+                            if (data.body.status == 0) {
+                                self.$store.dispatch('delTask',{id : id});
+                            } else {
+                                alert('删除失败，请检查网络');
+                            }
+                        })
+                        .catch(function() {
+                            alert('删除失败，请检查网络');
+                        })
+                },
+                onTaskPause : function(id) {
+                    var PAUSE_URL = snailtask.BASE_URL + '/probe-service/task/taskPause';
+                    var requestBody = {
+                        taskId : id,
+                    };
+                    var self = this;
+                    Vue.http.post(PAUSE_URL, requestBody)
+                        .then(function(data) {
+                            if (data.body.status == 0) {
+                                self.$store.dispatch('updateTask',{id : id,status : -1});
+                            } else {
+                                alert('暂停失败，请检查网络');
+                            }
+                        })
+                        .catch(function() {
+                            alert('暂停失败，请检查网络');
+                        })
                 },
                 isActive : function(type) {
                     return this.type == type ? 'active' : '';

@@ -38,7 +38,9 @@
                     }
                 }
                 if(index >=0){
-                    state.taskList[index] = task;
+                    for(var key in task){
+                        self.taskList[index][key] = task[key];
+                    }
                 }
             },
             updatePage : function(state, page) {

@@ -112,10 +112,10 @@ Vue.component('destconfig', {
                 this.list.splice(index,1);
             }
         },
-        updateDestFromList : function(name,ip) {
+        updateDestFromList : function(name,ip,id) {
             var index = -1;
             for(var i = 0; i < this.list.length; i++){
-                if(index == -1 && this.list[i].name == name){
+                if(index == -1 && this.list[i].id == id){
                     index = i;
                 }
             }
@@ -169,6 +169,7 @@ Vue.component('destconfig', {
         submit : function() {
             var destid = this.newDestName;
             var destip = this.newDestIp;
+            var id = this.editId;
             if(!this.validIp()){
                 this.errMsg = 'ip不符合规则';
                 return;
@@ -178,7 +179,19 @@ Vue.component('destconfig', {
             var self = this;
             /*编辑状态则更新*/
             if(this.editId){
-
+                this.editDestUpdate(id,destid,destip)
+                .then(function(data) {
+                    if(data.body.status == 0){
+                        self.updateDestFromList(destid,destip,id);
+                        self.reset();
+                        self.createShow = false;
+                    } else {
+                        self.errMsg = '更新失败'
+                    }
+                })
+                .catch(function() {
+                    self.errMsg = '更新失败，请检查网络';
+                });
             } else {
                 /*否则新建*/
                 this.createDest(destid,destip)
@@ -222,21 +235,22 @@ Vue.component('destconfig', {
             this.step = 2;
             this.createShow = true;
         },
-        createDest : function(id,ip) {
+        createDest : function(name,ip) {
             var CREATE_URL = snailtask.BASE_URL +  '/probe-service/taskDest/taskDestNew'
             var requestBody = {
-                destID : id,
+                destID : name,
                 destIP : ip
             };
             return Vue.http.post(CREATE_URL,requestBody);
         },
-        editDestUpdate : function(id,ip) {
+        editDestUpdate : function(id,name,ip) {
             var UPDATE_URL = snailtask.BASE_URL +  '/probe-service/taskDest/taskDestUpdate'
             var requestBody = {
-                destID : id,
+                id : id,
+                destID : name,
                 destIP : ip
             };
-            return Vue.http.post(CREATE_URL,requestBody);
+            return Vue.http.post(UPDATE_URL,requestBody);
         },
         closeCreatePanel : function() {
             this.createShow = false;

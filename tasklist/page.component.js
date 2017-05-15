@@ -14,7 +14,7 @@ Vue.component('page', {
     methods : {
         load : function() {
             if(typeof snailtask[this.loadfunc] == 'function'){
-                snailtask[this.loadfunc]('',this.currentPage)
+                snailtask[this.loadfunc]('',this.currentPage - 1)
                 .then(snailtask[this.loadcb])
                 .catch(function(err) {
                     console.log(err)

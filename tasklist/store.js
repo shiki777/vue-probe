@@ -10,9 +10,36 @@
             isEdit : false /*是否编辑任务，否则为新建任务*/
         },
         mutations : {
+            /*整体更新list*/
             updateTaskList : function(state,list) {
                 var l = formatList(list);
                 state.taskList = l;
+            },
+            /*添加一条记录*/
+            addTask : function(state, task) {
+                state.push(task);
+            },
+            delTask: function(state, task) {
+                var index = -1;
+                for (var i = 0; i < state.taskList.length; i++) {
+                    if (index == -1 && state.taskList[i].id == task.id) {
+                        index = i;
+                    }
+                }
+                if (index >= 0) {
+                    state.taskList.splice(index, 1);
+                }
+            },
+            updateTask : function(state, task) {
+                var index = -1;
+                for(var i = 0; i < state.taskList.length; i++){
+                    if(index == -1 && state.taskList[i].id == task.id){
+                        index = i;
+                    }
+                }
+                if(index >=0){
+                    state.taskList[index] = task;
+                }
             },
             updatePage : function(state, page) {
                 state.taskPage = page;
@@ -33,6 +60,16 @@
         actions : {        
             updateTaskList : function(context,list) {
                 context.commit('updateTaskList', list);
+            },
+            addTask : function(context, task) {
+                console.log(task)
+                context.commit('addTaskList',task);
+            },
+            delTask : function(context, task) {
+                context.commit('delTask', task);
+            },
+            updateTask : function(context, task) {
+                context.commit('updateTask', task);
             },
             updatePage : function(context, page) {
                 context.commit('updatePage',page);

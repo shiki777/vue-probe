@@ -45,11 +45,12 @@ Vue.component('probelist', {
             BASE_URL: 'http://10.220.10.60:8089',
             PROBE_URL: '/probe-service/probe/probeList',
             GROUP_URL: '/probe-service/org/orgListWithProbeList',
+            CREATE_URL : '/probe-service/task/taskNew',
             probeName: '',
             index: 0,
             size: 5,
             groups: [],
-            selectedProbes : [], /*选中的探针组*/
+            selectedProbes : [], /*选中的探针组,此数据没有和选中组排重*/
             selectedGroups : [] /*选中的组*/
         }
     },
@@ -77,7 +78,7 @@ Vue.component('probelist', {
         },
         probeSubmit : function(e) {
             e.preventDefault();
-            this.$emit('submit');
+            this.$emit('submit',{groups : this.selectedGroups,probes : this.selectedShowProbes});
         },
         /*加载探针列表*/
         load: function() {

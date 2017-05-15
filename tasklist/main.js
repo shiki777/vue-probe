@@ -30,7 +30,7 @@
             timePickerIncrement: 1,
             minDate : moment(),
             locale: {
-                format: 'MM/DD/YYYY HH:mm:ss'
+                format: 'YYYY-MM-DD HH:mm:ss'
             },
             autoApply: true,
         }, function(start, end){        
@@ -46,7 +46,7 @@
             timePickerIncrement: 1,
             minDate : moment(),
             locale: {
-                format: 'MM/DD/YYYY HH:mm:ss'
+                format: 'YYYY-MM-DD HH:mm:ss'
             },
             autoApply: true,
         }, function(start, end){        

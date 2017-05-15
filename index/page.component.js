@@ -14,7 +14,7 @@ Vue.component('page', {
     methods : {
         load : function() {
             if(typeof snailprobe[this.loadfunc] == 'function'){
-                snailprobe[this.loadfunc]('',this.currentPage)
+                snailprobe[this.loadfunc]('',this.currentPage - 1)
                 .then(snailprobe[this.loadcb])
                 .catch(function(err) {
                     console.log(err)

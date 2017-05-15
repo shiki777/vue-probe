@@ -176,7 +176,12 @@ Vue.component('destconfig', {
                 this.errMsg = '';
             }
             var self = this;
-            this.createDest(destid,destip)
+            /*编辑状态则更新*/
+            if(this.editId){
+
+            } else {
+                /*否则新建*/
+                this.createDest(destid,destip)
                 .then(function(data) {
                     if(data.body.status == 0){
                         self.list.splice(0,0,{name : destid,ip : destip});
@@ -188,7 +193,8 @@ Vue.component('destconfig', {
                 })
                 .catch(function() {
                     self.errMsg = '创建失败，请检查网络'
-                })
+                })                
+            }
         },
         removeDest : function(id) {
             var DEL_URL = snailtask.BASE_URL +  '/probe-service/taskDest/taskDestDelete';
@@ -218,6 +224,14 @@ Vue.component('destconfig', {
         },
         createDest : function(id,ip) {
             var CREATE_URL = snailtask.BASE_URL +  '/probe-service/taskDest/taskDestNew'
+            var requestBody = {
+                destID : id,
+                destIP : ip
+            };
+            return Vue.http.post(CREATE_URL,requestBody);
+        },
+        editDestUpdate : function(id,ip) {
+            var UPDATE_URL = snailtask.BASE_URL +  '/probe-service/taskDest/taskDestUpdate'
             var requestBody = {
                 destID : id,
                 destIP : ip

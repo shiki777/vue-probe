@@ -57,7 +57,7 @@ Vue.component('destconfig', {
     </div>',
     data : function() {
         return {
-            show : true, /*控制主机标识配置面板显示*/
+            show : false, /*控制主机标识配置面板显示*/
             createShow : false,/*控制创建主机标识面板显示*/
             index : 0,
             page : 1,
@@ -282,6 +282,10 @@ Vue.component('destconfig', {
     },
     created : function() {
         /*新建任务中也会拉取该接口，没有放到store中统一存储，重复拉取了*/
-        this.load();        
+        this.load();     
+        var self = this;  
+        snailtask.messageBus.$on('showDest', function(bool) {
+            self.show = true;
+        });         
     }
 })

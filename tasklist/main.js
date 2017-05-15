@@ -97,6 +97,9 @@
                 onCreateTaskClick : function() {
                     snailtask.messageBus.$emit('showPanel',true);
                 },
+                onDestConfigClick : function() {
+                    snailtask.messageBus.$emit('showDest', true);
+                },
                 isActive : function(type) {
                     return this.type == type ? 'active' : '';
                 },

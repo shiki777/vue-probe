@@ -34,7 +34,7 @@ Vue.component('probelist', {
         <div class="select-panel">\
         <h3>已选择探针</h3><button class="btn btn-primary" @click="lastStep($event)">上一步</button><button class="btn btn-primary" @click="probeSubmit($event)">提交</button>\
         <div class="selected-wrap">\
-            <div class="selected-probe" v-for="p in selectedShowProbes">{{p}}</div>\
+            <div class="selected-probe" v-for="p in selectedShowProbes">{{p.name}}</div>\
         </div>\
         </div>\
     </div>',
@@ -63,8 +63,8 @@ Vue.component('probelist', {
                 for(var j = 0; j < this.groups[gid].probes.length; j++){
                     var p = this.groups[gid].probes[j];
                     /*这一步把选中的单个探针和组内探针做去重*/
-                    if(res.indexOf(p.hostname) < 0){
-                        res.push(p.hostname);
+                    if(!this.isProbeInArray(res,p)){
+                        res.push({name : p.hostname,gid : gid});
                     }
                 }
             }
@@ -126,24 +126,42 @@ Vue.component('probelist', {
             if(this.isProbeSelected(name)){
                 this.removeFromSelectedProbe(name);
             } else {
-                this.addToSelectedProbe(name);
+                this.addToSelectedProbe({name : name, gid : 0});
             }
         },
         /*探针是否被选择*/
         isProbeSelected : function(name) {
-            if(this.selectedProbes.indexOf(name) >= 0){
-                return true;
+            for(var i = 0; i < this.selectedProbes.length; i++){
+                if(name == this.selectedProbes[i].name){
+                    return true;
+                }
+            }
+            return false;
+        },
+        /*上一个函数可以调这个*/
+        isProbeInArray : function(arr,probe) {
+            for(var i = 0; i < arr.length; i++){
+                if(probe.name == arr[i].name){
+                    return true;
+                }
             }
             return false;
         },
         /*把探针加入已选择探针*/
-        addToSelectedProbe : function(name) {
-            this.selectedProbes.push(name);
+        addToSelectedProbe : function(probeObj) {
+            this.selectedProbes.push(probeObj);
         },
         /*把探针移出已选择探针*/
         removeFromSelectedProbe : function(name) {
-            var index = this.selectedProbes.indexOf(name);
-            this.selectedProbes.splice(index,1);
+            var index = -1;
+            for(var i = 0; i < this.selectedProbes.length; i++){
+                if(name == this.selectedProbes[i].name){
+                    index = i;
+                }
+            }
+            if(index > -1){
+                this.selectedProbes.splice(index,1);
+            }
         },
         /*组是否被选择*/
         isGroupBoxChecked : function(id) {

@@ -1,6 +1,7 @@
 Vue.component('destconfig', {
     template : '<div class="creatTask" v-show="show">\
         <h4 class="channel-title">主机标识配置</h4>\
+        <span aria-hidden="true" class="close" @click="hidePanel()">×</span>\
         <div class="creattaskwrap">\
             <button class="btn btn-primary" @click="onCreateDestClick($event)" style="margin-bottom:5px;">创建主机标识</button>\
             <table class="table table-striped table-bordered table-hover table-prolist" id="tableDada">\
@@ -278,6 +279,11 @@ Vue.component('destconfig', {
                 return true;
             }
             return false;            
+        },
+        hidePanel : function() {
+            this.show = false;
+            this.createShow = false;
+            this.reset();
         }
     },
     created : function() {

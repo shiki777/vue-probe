@@ -39,7 +39,7 @@
                 }
                 if(index >=0){
                     for(var key in task){
-                        self.taskList[index][key] = task[key];
+                        state.taskList[index][key] = task[key];
                     }
                 }
             },

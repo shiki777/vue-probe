@@ -1,6 +1,7 @@
 Vue.component('taskpanel', {
     template: '                            <div><div class="creatTask" :style="showStyle">\
     <h4 class="channel-title">{{title}}</h4>\
+    <span aria-hidden="true" class="close" @click="hidePanel()">×</span>\
     <div class="creattaskwrap">\
     <form class="form-horizontal" v-show="step == 1">\
     <br>\
@@ -232,6 +233,10 @@ Vue.component('taskpanel', {
     methods: {
         setVisible: function(bool) {
             this.show = bool;
+        },
+        hidePanel : function() {
+            this.setVisible(false);
+            this.reset();
         },
         getTaskListIp: function(val) {
             var ip = '';

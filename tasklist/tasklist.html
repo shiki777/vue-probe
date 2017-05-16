@@ -118,14 +118,15 @@
 										<td>{{task.name}}</td>
 										<td>{{task.type}}</td>
 										<td>{{task.time}}</td>
-										<td>{{task.operationType}}</td>
+										<td>{{typeMsg(task.operationType)}}</td>
 										<td>{{statusMsg(task.status)}}</td>
 										<td>{{task.udphost}}</td>
 										<td>
 											<div class="">
 												<button class="btn btn-default btn-sm" @click="onTaskDel(task.id,task.taskName)">删除</button>
 												<button class="btn btn-default btn-sm" @click="onTasdEdit(task.id)">修改</button>
-												<button v-if="task.status" class="btn btn-default btn-sm" @click="onTaskPause(task.id)">暂停</button>
+												<button v-if="task.status == 1" class="btn btn-default btn-sm" @click="onTaskPause(task.id)">暂停</button>
+												<button v-if="task.status == -1" class="btn btn-default btn-sm" @click="onTaskRefuse(task.id)">恢复</button>
 											</div>	
 										</td>
 									</tr>

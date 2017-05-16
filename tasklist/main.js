@@ -85,6 +85,19 @@
                         return '未运行';
                     }
                 },
+                typeMsg : function(type) {
+                    if(type == 1){
+                        return '立即执行';
+                    }
+                    if(type == 2){
+                        return '定时执行(运行开始时间)';
+                    }
+                    if(type == 3){
+                        return '定时执行(运行开始时间-运行结束时间)';
+                    } else {
+                        return type
+                    };
+                },
                 onCurrentTaskClick : function() {
                     if(this.type == 'cur') return;
                     this.type = 'cur';
@@ -113,9 +126,17 @@
                 },
                 onTaskDel: function(id, name) {
                     var DEL_URL = snailtask.BASE_URL + '/probe-service/task/taskDelete';
+                    if(this.type == 'his'){
+                        DEL_URL = snailtask.BASE_URL + '/probe-service/task/historyTaskDelete';
+                    }
                     var requestBody = {
                         taskId : id,
                         taskName: name
+                    };
+                    if(this.type == 'his'){
+                        requestBody = {
+                            taskId : id
+                        };
                     };
                     var self = this;
                     Vue.http.post(DEL_URL, requestBody)
@@ -124,6 +145,7 @@
                                 self.$store.dispatch('delTask',{id : id});
                             } else {
                                 alert('删除失败，请检查网络');
+
                             }
                         })
                         .catch(function() {
@@ -145,6 +167,25 @@
                             }
                         })
                         .catch(function() {
+                            alert('暂停失败，请检查网络');
+                        })
+                },
+                onTaskRefuse : function(id) {
+                    var REFUSE_URL = snailtask.BASE_URL + '/probe-service/task/taskRecover';
+                    var requestBody = {
+                        taskId : id,
+                    };
+                    var self = this;
+                    Vue.http.post(REFUSE_URL, requestBody)
+                        .then(function(data) {
+                            if (data.body.status == 0) {
+                                self.$store.dispatch('updateTask',{id : id,status : 1});
+                            } else {
+                                alert('暂停失败，请检查网络');
+                            }
+                        })
+                        .catch(function(e) {
+                            console.log(e)
                             alert('暂停失败，请检查网络');
                         })
                 },

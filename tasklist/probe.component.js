@@ -50,6 +50,7 @@ Vue.component('probelist', {
             index: 0,
             size: 5,
             groups: [],
+            tempGroups : {},
             selectedProbes : [], /*选中的探针组,此数据没有和选中组排重*/
             selectedGroups : [] /*选中的组*/
         }
@@ -141,7 +142,7 @@ Vue.component('probelist', {
         /*上一个函数可以调这个*/
         isProbeInArray : function(arr,probe) {
             for(var i = 0; i < arr.length; i++){
-                if(probe.name == arr[i].name){
+                if(probe.name == arr[i].hostname){
                     return true;
                 }
             }
@@ -220,6 +221,9 @@ Vue.component('probelist', {
                 };
             }
             return res;
+        },
+        onSelectedBoxClick: function(p) {
+
         }
     },
     created: function() {

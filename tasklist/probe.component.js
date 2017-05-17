@@ -34,7 +34,7 @@ Vue.component('probelist', {
         <div class="select-panel">\
         <h3>已选择探针</h3><button class="btn btn-primary" @click="lastStep($event)">上一步</button><button class="btn btn-primary" @click="probeSubmit($event)">提交</button>\
         <div class="selected-wrap">\
-            <div class="selected-probe" v-for="p in selectedShowProbes">{{p.name}}</div>\
+            <div class="selected-probe" v-for="p in selectedShowProbes">{{p.hostName}}</div>\
         </div>\
         </div>\
     </div>',
@@ -65,7 +65,7 @@ Vue.component('probelist', {
                     var p = this.groups[gid].probes[j];
                     /*这一步把选中的单个探针和组内探针做去重*/
                     if(!this.isProbeInArray(res,p)){
-                        res.push({hostname : p.hostName,orgId : gid});
+                        res.push({hostName : p.hostname,orgId : gid});
                     }
                 }
             }
@@ -142,7 +142,7 @@ Vue.component('probelist', {
         /*上一个函数可以调这个*/
         isProbeInArray : function(arr,probe) {
             for(var i = 0; i < arr.length; i++){
-                if(probe.name == arr[i].hostName){
+                if(probe.hostname == arr[i].hostName){
                     return true;
                 }
             }

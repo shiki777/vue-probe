@@ -401,7 +401,7 @@ Vue.component('taskpanel', {
                     if (data.body.status == 0) {
                         self.reset();
                         self.$store.dispatch('updateTask', {
-                            id: data.body.taskId,
+                            id: requestBody.task.taskId,
                             name: requestBody.task.taskName,
                             type: requestBody.task.type,
                             time: requestBody.task.operationStartTime,
@@ -450,7 +450,7 @@ Vue.component('taskpanel', {
                     if (data.body.status == 0) {
                         self.reset();
                         self.$store.dispatch('updateTask', {
-                            id: data.body.taskId,
+                            id: requestBody.task.taskId,
                             name: requestBody.task.taskName,
                             type: requestBody.task.type,
                             time: requestBody.task.operationStartTime,
@@ -592,8 +592,8 @@ Vue.component('taskpanel', {
                 operationEndTime : item.task.operationEndTime,
                 time : item.task.hbtime,
                 probelist : item.probeTaskList,
-                status : item.status,
-                id : item.taskId
+                status : item.task.status,
+                id : item.task.taskId
             };
         }
     },

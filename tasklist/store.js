@@ -17,7 +17,7 @@
             },
             /*添加一条记录*/
             addTask : function(state, task) {
-                state.push(task);
+                state.taskList.push(task);
             },
             delTask: function(state, task) {
                 var index = -1;
@@ -64,8 +64,7 @@
                 context.commit('updateTaskList', list);
             },
             addTask : function(context, task) {
-                console.log(task)
-                context.commit('addTaskList',task);
+                context.commit('addTask',task);
             },
             delTask : function(context, task) {
                 context.commit('delTask', task);
@@ -104,7 +103,17 @@
                 time : taskItem['hbtime'],
                 udphost : taskItem['udphost'],
                 status : taskItem['status'],
-                operationType : taskItem['operationType']
+                operationType : taskItem['operationType'],
+                taskAppid : taskItem['app'],
+                taskSize : taskItem['bytes'],
+                taskIp : taskItem['destIp'],
+                destId : taskItem['dest'],
+                tasktap1 : taskItem['pingIntervals'],
+                tasktap2 : taskItem['destPingIntervals'],
+                taskDuration : taskItem['intercept'],
+                operationEndTime : taskItem['operationEndTime'],
+                operationStartTime : taskItem['operationStartTime'],
+                taskStreamname : taskItem['name']
             });
         };
         return res;

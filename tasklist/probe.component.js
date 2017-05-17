@@ -65,7 +65,7 @@ Vue.component('probelist', {
                     var p = this.groups[gid].probes[j];
                     /*这一步把选中的单个探针和组内探针做去重*/
                     if(!this.isProbeInArray(res,p)){
-                        res.push({name : p.hostname,gid : gid});
+                        res.push({hostname : p.hostName,orgId : gid});
                     }
                 }
             }
@@ -127,13 +127,13 @@ Vue.component('probelist', {
             if(this.isProbeSelected(name)){
                 this.removeFromSelectedProbe(name);
             } else {
-                this.addToSelectedProbe({name : name, gid : 0});
+                this.addToSelectedProbe({hostName : name, orgId : 0});
             }
         },
         /*探针是否被选择*/
         isProbeSelected : function(name) {
             for(var i = 0; i < this.selectedProbes.length; i++){
-                if(name == this.selectedProbes[i].name){
+                if(name == this.selectedProbes[i].hostName){
                     return true;
                 }
             }
@@ -142,7 +142,7 @@ Vue.component('probelist', {
         /*上一个函数可以调这个*/
         isProbeInArray : function(arr,probe) {
             for(var i = 0; i < arr.length; i++){
-                if(probe.name == arr[i].hostname){
+                if(probe.name == arr[i].hostName){
                     return true;
                 }
             }
@@ -156,7 +156,7 @@ Vue.component('probelist', {
         removeFromSelectedProbe : function(name) {
             var index = -1;
             for(var i = 0; i < this.selectedProbes.length; i++){
-                if(name == this.selectedProbes[i].name){
+                if(name == this.selectedProbes[i].hostName){
                     index = i;
                 }
             }
@@ -221,9 +221,6 @@ Vue.component('probelist', {
                 };
             }
             return res;
-        },
-        onSelectedBoxClick: function(p) {
-
         }
     },
     created: function() {

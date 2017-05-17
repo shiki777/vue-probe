@@ -124,8 +124,8 @@ Vue.component('taskpanel', {
     </div>',
     data: function() {
         return {
-            show: true,
-            step: 2,
+            show: false,
+            step: 1,
             destList: [],
             destId: 'empty',/*接收主机标识id*/
             taskRuntype: '3',/*任务运行类型*/
@@ -335,16 +335,22 @@ Vue.component('taskpanel', {
                     "type": this.taskType,
                     "udphost": this.taskUdp
                 },
-                "hostNameList": data.probes
+                "probeOrgList": data.probes
             };
             var self = this;
-            /*暂时不考虑标识分页问题，等待需求*/
             Vue.http.post(url, requestBody)
                 .then(function(data) {
-                    if(data.body.status == 0){
+                    if (data.body.status == 0) {
                         self.reset();
-                        requestBody.id = data.body.taskId;
-                        self.$store.dispatch('addTask',requestBody);
+                        self.$store.dispatch('addTask', {
+                            id: data.body.taskId,
+                            name: requestBody.task.taskName,
+                            type: requestBody.task.type,
+                            time: requestBody.task.operationStartTime,
+                            udphost: requestBody.task.udphost,
+                            status: requestBody.task.status,
+                            operationType: requestBody.task.operationType
+                        });
                     } else {
                         alert('添加任务失败');
                     }
@@ -418,12 +424,30 @@ Vue.component('taskpanel', {
             this.taskUdp = '';
             this.taskIp = '';
             this.taskDuration = '';          
+        },
+        updateTaskData : function(task) {
+            this.destId =  task.destId || 'empty';
+            this.taskRuntype = task.operationType;
+            this.taskType = task.type;
+            this.taskName = task.name;
+            this.taskAppid = task.taskAppid;
+            this.taskStreamname = task.taskStreamname;
+            this.taskSize = task.taskSize;
+            this.tasktap1 = task.tasktap1;
+            this.tasktap2 = task.tasktap2;
+            this.taskUdp = task.udphost;
+            this.taskIp = task.taskIp;
+            this.taskDuration = task.taskDuration;      
         }
     },
     created: function() {
         var self = this;
         snailtask.messageBus.$on('showPanel', function(bool) {
             self.setVisible(bool);
+        });
+        snailtask.messageBus.$on('editTask', function(task) {
+            self.setVisible(true);
+            self.updateTaskData(task);
         });
         this.loadTaskDestList();
     }

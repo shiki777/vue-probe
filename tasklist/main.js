@@ -189,6 +189,11 @@
                             alert('暂停失败，请检查网络');
                         })
                 },
+                onTasdEdit : function(id) {
+                    var task = this.getEditTaskData(id);
+                    if(!task) return;
+                    snailtask.messageBus.$emit('editTask',task);
+                },
                 isActive : function(type) {
                     return this.type == type ? 'active' : '';
                 },
@@ -200,6 +205,15 @@
                     /*切换时清空任务名*/
                     this.taskName = '';
                     this.$store.commit('updateTaskName','');
+                },
+                getEditTaskData : function(id) {
+                    for(var i = 0; i < this.$store.state.taskList.length; i++){
+                        var task = this.$store.state.taskList[i];
+                        if(task.id == id){
+                            return task;
+                        }
+                    }
+                    return '';
                 }
             }
         })        

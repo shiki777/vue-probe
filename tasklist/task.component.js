@@ -438,6 +438,42 @@ Vue.component('taskpanel', {
             this.taskUdp = task.udphost;
             this.taskIp = task.taskIp;
             this.taskDuration = task.taskDuration;      
+        },
+        loadTaskDetail: function(id) {
+            var url = snailtask.BASE_URL + '/probe-service/task/taskItemUpdate';
+            var requestBody = {
+                taskId: id
+            };
+            var self = this;
+            Vue.http.post(url, requestBody)
+                .then(function(data) {
+                    var taskitem = self.formatTaskDetail(data.body);
+                    self.updateTaskData(taskitem);
+                    snailtask.messageBus.$emit('editProbePanel', taskitem.probelist);
+                })
+                .catch(function(e) {
+                    alert(e);
+                })
+        },
+        formatTaskDetail : function(item) {
+            return {
+                destId : item.task.dest,
+                operationType : item.task.operationType,
+                type : item.task.type,
+                name : item.task.taskName,
+                taskAppid : item.task.app,
+                taskStreamname : item.task.name,
+                taskSize : item.task.bytes,
+                tasktap1 : item.task.pingIntervals,
+                tasktap2 : item.task.destPingIntervals,
+                udphost : item.task.udphost,
+                taskIp : item.task.destIp,
+                taskDuration : item.task.intercept,
+                operationStartTime : item.task.operationStartTime,
+                operationEndTime : item.task.operationEndTime,
+                time : item.task.hbtime,
+                probelist : item.probeTaskList
+            };
         }
     },
     created: function() {
@@ -447,7 +483,7 @@ Vue.component('taskpanel', {
         });
         snailtask.messageBus.$on('editTask', function(task) {
             self.setVisible(true);
-            self.updateTaskData(task);
+            self.loadTaskDetail(task.id);
         });
         this.loadTaskDestList();
     }

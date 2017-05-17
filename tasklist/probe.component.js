@@ -221,12 +221,29 @@ Vue.component('probelist', {
                 };
             }
             return res;
+        },
+        /*处理编辑的探针列表，更新selectedProbes和selectedGroups*/
+        formatProbelist : function(probelist) {
+            var self = this;
+            probelist.map(function(probe) {
+                if(probe.orgId){
+                    /*组未加入，则加入已选择组*/
+                    if(self.selectedGroups.indexOf(probe.orgId) == -1){
+                        self.selectedGroups.push(probe.orgId);
+                    }
+                } else {
+                    self.selectedProbes.push({hostName : probe.hostname, orgId : probe.orgId});
+                }
+            })
         }
     },
     created: function() {
         this.load();
         this.loadGroup();
-
+        var self = this;
+        snailtask.messageBus.$on('editProbePanel', function(probelist) {
+            self.formatProbelist(probelist);
+        });
     }
 })
 

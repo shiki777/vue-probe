@@ -120,6 +120,7 @@
                 },
                 onCreateTaskClick : function() {
                     snailtask.messageBus.$emit('showPanel',true);
+                    snailtask.messageBus.$emit('updateType','new');
                 },
                 onDestConfigClick : function() {
                     snailtask.messageBus.$emit('showDest', true);
@@ -189,10 +190,16 @@
                             alert('暂停失败，请检查网络');
                         })
                 },
-                onTasdEdit : function(id) {
+                onTasdEdit: function(id) {
                     var task = this.getEditTaskData(id);
-                    if(!task) return;
-                    snailtask.messageBus.$emit('editTask',task);
+                    if (!task) return;
+                    if (this.type == 'cur') {
+                        snailtask.messageBus.$emit('updateType', 'update');
+                        snailtask.messageBus.$emit('editTask', task);
+                    } else {
+                        snailtask.messageBus.$emit('updateType', 'hisupdate');
+                        snailtask.messageBus.$emit('editTask', task);
+                    }
                 },
                 isActive : function(type) {
                     return this.type == type ? 'active' : '';

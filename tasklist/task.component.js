@@ -124,6 +124,7 @@ Vue.component('taskpanel', {
     </div>',
     data: function() {
         return {
+            submitType : 'new',
             show: false,
             step: 1,
             destList: [],
@@ -309,7 +310,14 @@ Vue.component('taskpanel', {
             }
         },
         submit: function(data) {
-            this.submitNew(data);
+            if(this.submitType == 'new'){
+                this.submitNew(data);
+            } else if(this.submitType == 'update') {
+                this.submitEdit(data);
+            } else if(this.submitType == 'hisupdate'){
+                this.submitHisEdit(data);
+            }
+            
         },
         submitNew: function(data) {
             var url = snailtask.BASE_URL + '/probe-service/task/taskNew';
@@ -359,9 +367,102 @@ Vue.component('taskpanel', {
                     alert('添加任务请求失败');
                 });
         },
-        submitEdit: function() {
-
+        submitEdit: function(data) {
+            var url = snailtask.BASE_URL + '/probe-service/task/taskUpdate';
+            var requestBody = {
+                "task": {
+                    "app": this.taskAppid,
+                    "bytes": this.taskSize,
+                    "counterType": "GAUGE",
+                    "dest": this.destId ? this.destId : '',
+                    "destIp": this.taskIp,
+                    "destPingIntervals": this.tasktap2,
+                    "intercept": this.taskDuration,
+                    "name": this.taskStreamname,
+                    "operationEndTime": this.getEndTime(),
+                    "operationStartTime": this.getStartTime(),
+                    "operationType": this.taskRuntype,
+                    "pingIntervals": this.tasktap1,
+                    "src": '',
+                    "srcIp": '',
+                    "status": 0,
+                    "taskName": this.taskName,
+                    "timestamp": 0,
+                    "type": this.taskType,
+                    "udphost": this.taskUdp
+                },
+                "probeOrgList": data.probes
+            };
+            var self = this;
+            Vue.http.post(url, requestBody)
+                .then(function(data) {
+                    if (data.body.status == 0) {
+                        self.reset();
+                        self.$store.dispatch('updateTask', {
+                            id: data.body.taskId,
+                            name: requestBody.task.taskName,
+                            type: requestBody.task.type,
+                            time: requestBody.task.operationStartTime,
+                            udphost: requestBody.task.udphost,
+                            status: requestBody.task.status,
+                            operationType: requestBody.task.operationType
+                        });
+                    } else {
+                        alert('更新任务失败');
+                    }
+                })
+                .catch(function() {
+                    alert('更新任务请求失败');
+                });
         },
+        submitHisEdit: function(data) {
+            var url = snailtask.BASE_URL + '/probe-service/task/historyTaskUpdate';
+            var requestBody = {
+                "task": {
+                    "app": this.taskAppid,
+                    "bytes": this.taskSize,
+                    "counterType": "GAUGE",
+                    "dest": this.destId ? this.destId : '',
+                    "destIp": this.taskIp,
+                    "destPingIntervals": this.tasktap2,
+                    "intercept": this.taskDuration,
+                    "name": this.taskStreamname,
+                    "operationEndTime": this.getEndTime(),
+                    "operationStartTime": this.getStartTime(),
+                    "operationType": this.taskRuntype,
+                    "pingIntervals": this.tasktap1,
+                    "src": '',
+                    "srcIp": '',
+                    "status": 0,
+                    "taskName": this.taskName,
+                    "timestamp": 0,
+                    "type": this.taskType,
+                    "udphost": this.taskUdp
+                },
+                "probeOrgList": data.probes
+            };
+            var self = this;
+            Vue.http.post(url, requestBody)
+                .then(function(data) {
+                    if (data.body.status == 0) {
+                        self.reset();
+                        self.$store.dispatch('updateTask', {
+                            id: data.body.taskId,
+                            name: requestBody.task.taskName,
+                            type: requestBody.task.type,
+                            time: requestBody.task.operationStartTime,
+                            udphost: requestBody.task.udphost,
+                            status: requestBody.task.status,
+                            operationType: requestBody.task.operationType
+                        });
+                    } else {
+                        alert('更新历史任务失败');
+                    }
+                })
+                .catch(function() {
+                    alert('更新历史任务请求失败');
+                });
+        },        
         /*验证第一步表单是否达标*/
         validFisrtStep: function() {
             var validOK = true;
@@ -441,6 +542,9 @@ Vue.component('taskpanel', {
         },
         loadTaskDetail: function(id) {
             var url = snailtask.BASE_URL + '/probe-service/task/taskItemUpdate';
+            if(this.submitType == 'hisupdate'){
+                url = snailtask.BASE_URL + '/probe-service/task/historyTaskItemUpdate';
+            }
             var requestBody = {
                 taskId: id
             };
@@ -485,6 +589,9 @@ Vue.component('taskpanel', {
             self.setVisible(true);
             self.loadTaskDetail(task.id);
         });
+        snailtask.messageBus.$on('updateType', function(type) {
+            self.submitType = type;
+        })
         this.loadTaskDestList();
     }
 })

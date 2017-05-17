@@ -139,7 +139,8 @@ Vue.component('taskpanel', {
             tasktap2: '', /*对同一个目标的ping包间隔*/
             taskUdp: '',/*任务UDP上报地址*/
             taskIp: '',/*任务接受主机IP*/
-            taskDuration: '' /*任务ping持续时间*/
+            taskDuration: '', /*任务ping持续时间*/
+            id : '' /*任务id*/
         }
     },
     component: {
@@ -385,13 +386,14 @@ Vue.component('taskpanel', {
                     "pingIntervals": this.tasktap1,
                     "src": '',
                     "srcIp": '',
-                    "status": 0,
+                    "status": this.status,
+                    "taskId": this.id,
                     "taskName": this.taskName,
                     "timestamp": 0,
                     "type": this.taskType,
                     "udphost": this.taskUdp
                 },
-                "probeOrgList": data.probes
+                "ptList": data.probes
             };
             var self = this;
             Vue.http.post(url, requestBody)
@@ -433,13 +435,14 @@ Vue.component('taskpanel', {
                     "pingIntervals": this.tasktap1,
                     "src": '',
                     "srcIp": '',
-                    "status": 0,
+                    "status": this.status,
+                    "taskId": this.id,
                     "taskName": this.taskName,
                     "timestamp": 0,
                     "type": this.taskType,
                     "udphost": this.taskUdp
                 },
-                "probeOrgList": data.probes
+                "ptList": data.probes
             };
             var self = this;
             Vue.http.post(url, requestBody)
@@ -463,6 +466,14 @@ Vue.component('taskpanel', {
                     alert('更新历史任务请求失败');
                 });
         },        
+        getPTList : function(list) {
+            var res = [];
+            list.map(function(p) {
+                res.push({
+                    // id : p.
+                })
+            })
+        },
         /*验证第一步表单是否达标*/
         validFisrtStep: function() {
             var validOK = true;
@@ -524,7 +535,9 @@ Vue.component('taskpanel', {
             this.tasktap2 = '';
             this.taskUdp = '';
             this.taskIp = '';
-            this.taskDuration = '';          
+            this.taskDuration = ''; 
+            this.id = '';
+            this.status = 0;         
         },
         updateTaskData : function(task) {
             this.destId =  task.destId || 'empty';
@@ -538,7 +551,9 @@ Vue.component('taskpanel', {
             this.tasktap2 = task.tasktap2;
             this.taskUdp = task.udphost;
             this.taskIp = task.taskIp;
-            this.taskDuration = task.taskDuration;      
+            this.taskDuration = task.taskDuration;    
+            this.id = task.id;
+            this.status = task.status;  
         },
         loadTaskDetail: function(id) {
             var url = snailtask.BASE_URL + '/probe-service/task/taskItemUpdate';
@@ -576,7 +591,9 @@ Vue.component('taskpanel', {
                 operationStartTime : item.task.operationStartTime,
                 operationEndTime : item.task.operationEndTime,
                 time : item.task.hbtime,
-                probelist : item.probeTaskList
+                probelist : item.probeTaskList,
+                status : item.status,
+                id : item.taskId
             };
         }
     },

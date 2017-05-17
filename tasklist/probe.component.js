@@ -242,7 +242,6 @@ Vue.component('probelist', {
         this.loadGroup();
         var self = this;
         snailtask.messageBus.$on('editProbePanel', function(probelist) {
-            console.log(probelist)
             self.formatProbelist(probelist);
         });
     }

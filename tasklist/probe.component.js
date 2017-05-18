@@ -65,7 +65,7 @@ Vue.component('probelist', {
                     var p = this.groups[gid].probes[j];
                     /*这一步把选中的单个探针和组内探针做去重*/
                     if(!this.isProbeInArray(res,p)){
-                        res.push({hostName : p.hostname,orgId : gid});
+                        res.push({hostName : p.hostName,orgId : gid});
                     }
                 }
             }
@@ -80,6 +80,10 @@ Vue.component('probelist', {
         probeSubmit : function(e) {
             e.preventDefault();
             this.$emit('submit',{groups : this.selectedGroups,probes : this.selectedShowProbes});
+        },
+        /*后端接口老变，专门格式化*/
+        parseProbes : function() {
+            
         },
         /*加载探针列表*/
         load: function() {
@@ -142,7 +146,7 @@ Vue.component('probelist', {
         /*上一个函数可以调这个*/
         isProbeInArray : function(arr,probe) {
             for(var i = 0; i < arr.length; i++){
-                if(probe.hostname == arr[i].hostName){
+                if(probe.hostName == arr[i].hostName){
                     return true;
                 }
             }
@@ -232,7 +236,7 @@ Vue.component('probelist', {
                         self.selectedGroups.push(probe.orgId);
                     }
                 } else {
-                    self.selectedProbes.push({hostName : probe.hostname, orgId : probe.orgId});
+                    self.selectedProbes.push({hostName : probe.hostName, orgId : probe.orgId});
                 }
             })
         }

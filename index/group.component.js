@@ -263,7 +263,7 @@ Vue.component('group', {
                 for(var i = 0; i < data.body.probeList.length; i++){
                     var probeItem = data.body.probeList[i];
                     self.selectProbes.push({
-                        name : probeItem['hostname'],
+                        name : probeItem['hostName'],
                         time : probeItem['hbtime'],
                         ip : probeItem['ip'],
                         area : probeItem['district'],
@@ -292,7 +292,7 @@ Vue.component('group', {
                     var probeItem = data.body.probeList[i];
                     
                     self.selectedProbes.push({
-                        name : probeItem['hostname'],
+                        name : probeItem['hostName'],
                         time : probeItem['hbtime'],
                         ip : probeItem['ip'],
                         area : probeItem['district'],

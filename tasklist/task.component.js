@@ -285,9 +285,9 @@ Vue.component('taskpanel', {
         },
         nextStep: function(e) {
             e.preventDefault();
-            // if(this.validFisrtStep()){
+            if(this.validFisrtStep()){
             this.step = 2;
-            // }
+            }
         },
         toStep1: function() {
             this.step = 1;
@@ -393,7 +393,7 @@ Vue.component('taskpanel', {
                     "type": this.taskType,
                     "udphost": this.taskUdp
                 },
-                "ptList": data.probes
+                "probeOrgList": data.probes
             };
             var self = this;
             Vue.http.post(url, requestBody)
@@ -420,7 +420,7 @@ Vue.component('taskpanel', {
         submitHisEdit: function(data) {
             var url = snailtask.BASE_URL + '/probe-service/task/historyTaskUpdate';
             var requestBody = {
-                "task": {
+                "historyTask": {
                     "app": this.taskAppid,
                     "bytes": this.taskSize,
                     "counterType": "GAUGE",
@@ -442,7 +442,7 @@ Vue.component('taskpanel', {
                     "type": this.taskType,
                     "udphost": this.taskUdp
                 },
-                "ptList": data.probes
+                "probeOrgList": data.probes
             };
             var self = this;
             Vue.http.post(url, requestBody)
@@ -450,30 +450,23 @@ Vue.component('taskpanel', {
                     if (data.body.status == 0) {
                         self.reset();
                         self.$store.dispatch('updateTask', {
-                            id: requestBody.task.taskId,
-                            name: requestBody.task.taskName,
-                            type: requestBody.task.type,
-                            time: requestBody.task.operationStartTime,
-                            udphost: requestBody.task.udphost,
-                            status: requestBody.task.status,
-                            operationType: requestBody.task.operationType
+                            id: requestBody.historyTask.taskId,
+                            name: requestBody.historyTask.taskName,
+                            type: requestBody.historyTask.type,
+                            time: requestBody.historyTask.operationStartTime,
+                            udphost: requestBody.historyTask.udphost,
+                            status: requestBody.historyTask.status,
+                            operationType: requestBody.historyTask.operationType
                         });
                     } else {
                         alert('更新历史任务失败');
                     }
                 })
-                .catch(function() {
+                .catch(function(e) {
+                    console.log(e)
                     alert('更新历史任务请求失败');
                 });
         },        
-        getPTList : function(list) {
-            var res = [];
-            list.map(function(p) {
-                res.push({
-                    // id : p.
-                })
-            })
-        },
         /*验证第一步表单是否达标*/
         validFisrtStep: function() {
             var validOK = true;

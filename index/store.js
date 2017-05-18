@@ -116,7 +116,7 @@
         for(var i = 0; i < l; i++){
             var probeItem = list[i];
             res.push({
-                name : probeItem['hostname'],
+                name : probeItem['hostName'],
                 time : probeItem['hbtime'],
                 ip : probeItem['ip'],
                 area : probeItem['district'],

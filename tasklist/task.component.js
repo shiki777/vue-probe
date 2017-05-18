@@ -530,7 +530,12 @@ Vue.component('taskpanel', {
             this.taskIp = '';
             this.taskDuration = ''; 
             this.id = '';
-            this.status = 0;         
+            this.status = 0;     
+            var startTime = moment();
+            var endTime = moment().endOf('day');
+            singerPicker.data('daterangepicker').setStartDate(startTime);  
+            doublePicker.data('daterangepicker').setStartDate(startTime);  
+            doublePicker.data('daterangepicker').setEndDate(endTime);                 
         },
         updateTaskData : function(task) {
             this.destId =  task.destId || 'empty';
@@ -546,7 +551,10 @@ Vue.component('taskpanel', {
             this.taskIp = task.taskIp;
             this.taskDuration = task.taskDuration;    
             this.id = task.id;
-            this.status = task.status;  
+            this.status = task.status;
+            singerPicker.data('daterangepicker').setStartDate(task.operationStartTime);  
+            singerPicker.data('daterangepicker').setStartDate(task.operationStartTime);  
+            singerPicker.data('daterangepicker').setEndDate(task.operationEndTime);  
         },
         loadTaskDetail: function(id) {
             var url = snailtask.BASE_URL + '/probe-service/task/taskItemUpdate';

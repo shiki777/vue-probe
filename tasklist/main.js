@@ -23,12 +23,12 @@
         var endTime = moment().endOf('day');
         var startOnlyTime =moment();
 
-        $('input[name="task_time2"]').daterangepicker({
+        window.singerPicker = $('input[name="task_time2"]').daterangepicker({
             timePicker:true,
             timePicker24Hour:true,
             timePickerSeconds: true,
             timePickerIncrement: 1,
-            minDate : moment(),
+            // minDate : moment(),
             locale: {
                 format: 'YYYY-MM-DD HH:mm:ss'
             },
@@ -38,13 +38,13 @@
             endTime = end;
         });
 
-        $('input[name="task_time3"]').daterangepicker({
+        window.doublePicker = $('input[name="task_time3"]').daterangepicker({
             singleDatePicker: true,
             timePicker:true,
             timePicker24Hour:true,
             timePickerSeconds: true,
             timePickerIncrement: 1,
-            minDate : moment(),
+            // minDate : moment(),
             locale: {
                 format: 'YYYY-MM-DD HH:mm:ss'
             },

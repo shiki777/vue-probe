@@ -1,7 +1,7 @@
 /*分组组件*/
 /*2组件通过vuex通信,写代码方便一点,应该通过父子组件通信的*/
 Vue.component('groups', {
-    template: '<div class="btn-group probe-group" id="probeGroupList">\
+    template: '<div class="probe-group" id="probeGroupList">\
     <div class="btn btn-default group-btn" v-for="g in groups" :gid="g.id" @click="onGroupBtnClick(g.id,g.name)" :class="isCurrentGroup(g.id)">{{g.name}}<div class="group-hover-panel"><div @click="editGroup(g.id,g.name,$event)">编辑</div><div @click="delGroup(g.id,$event)">删除</div></div></div>\
     <button type="button" title="添加新组" class="btn btn-default glyphicon glyphicon-plus" @click="createGroup()"></button>\
     </div>',

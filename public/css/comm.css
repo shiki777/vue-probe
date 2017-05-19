@@ -1,5 +1,5 @@
 body{font-family:"Helvetica Neue","Luxi Sans","DejaVu Sans",Tahoma,"Hiragino Sans GB",STHeiti,"Microsoft YaHei";}
-.vFramework-topbar{background:#1f232c;border:none;height:50px;}
+.vFramework-topbar{background:#1f232c;border:none;height:62px;margin-bottom: 0;}
 .vFramework-topbar .container-fluid{padding-left:25px;}
 .vFramework-topbar .navbar-brand{color:#f16b0a;font-size:24px;font-weight:bold;padding-right:10px;}
 .vFramework-topbar .navbar-brand:hover{color:#f16b0a;}
@@ -10,13 +10,13 @@ body{font-family:"Helvetica Neue","Luxi Sans","DejaVu Sans",Tahoma,"Hiragino San
 .loginafter .user-dropdown>a,.loginafter .user-dropdown>a:focus,.loginafter .user-dropdown>a:hover{background:transparent;}
 .loginafter a{color:#afb5c2;}
 .loginafter a:hover{color:#fff;}
-.vFramework-sidebar{position:fixed;top:50px;bottom:0px;background-color:#232730;z-index:666;height:100%;}
-.sidebar-fold{background-color:#31343d;height:40px;text-align:center;position:relative;z-index:99;}
-.sidebar-fold .sidebar-toggle{width:100%;text-align:center;position:relative;padding:7px 0;margin-top:0px;margin-bottom:8px;background-color:transparent;background-image:none;border:none;outline:none;}
+.vFramework-sidebar{position:fixed;top:62px;bottom:0px;background-color:#232730;z-index:666;height:100%;}
+.sidebar-fold{background-color:#31343d;height:58px;text-align:center;position:relative;z-index:99;}
+.sidebar-fold .sidebar-toggle{width:100%;text-align:center;position:relative;margin-top:0px;background-color:transparent;background-image:none;border:none;outline:none;}
 .sidebar-fold .sidebar-toggle:hover .icon-bar{background-color:#fff;}
-.vFramework-body{padding-top:40px;}
+.vFramework-body{padding-top:62px;}
 .vFramework-body.vFramework-full .vFramework-sidebar{width:180px;}
-.vFramework-body.vFramework-full .vFramework-container{margin-top:50px;margin-left:180px;}
+.vFramework-body.vFramework-full .vFramework-container{border-top: solid 58px #eee;margin-left:180px;}
 .vFramework-body.vFramework-mini .vFramework-sidebari{width:50px;}
 .vFramework-body.vFramework-mini .vFramework-container{margin-top:50px;margin-left:50px;}
 .vFramework-body.vFramework-mini .sidebar-fold .sidebar-toggle{margin-top:6px;}
@@ -66,7 +66,7 @@ body{font-family:"Helvetica Neue","Luxi Sans","DejaVu Sans",Tahoma,"Hiragino San
 .navbar-header{float:left;}
 .navbar-right{float:right;}
 .channel-title{border-bottom:1px solid #e0e0e0;padding:15px;margin:0 0 10px;}
-.search-area{max-width:300px;float:left;margin-right:10px;margin-bottom:20px;}
+
 /*分组按钮*/
 .probe-group{margin-bottom: 10px;}
 .probe-group .btn-default{cursor: pointer;}
@@ -157,5 +157,80 @@ th.active .arrow{opacity:1;}
     overflow-y : auto;
 }
 
+/* 改版样式 */
+.sprites {
+    background: url(../img/sprite.png) no-repeat;
+}
 
+body {
+    background: #f6f6f6;
+}
 
+.container-bg {
+    background: #f6f6f6;
+    padding-left: 11px;
+}
+
+.lines {
+    display: block;
+    width: 30px;
+    height: 18px;
+    background-position: -1px -1px;
+    margin: 20px auto;    
+}
+
+.container-data {
+    margin-top: 41px;
+}
+
+.search-area {
+    float:left;
+    font-size: 12px;
+    width: 214px;
+    height: 34px;
+    line-height: 34px;
+    position: relative;
+}
+
+.search-probe-btn {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-position: -32px -2px;
+    top: 7px;
+    right: 11px;
+    z-index: 111;
+    cursor: pointer;
+}
+
+.search-input {
+    padding: 0;
+    margin: 0;
+    border : solid 1px #dfdfe6;
+    border-radius: 3px;    
+    padding-left: 16px;
+}
+
+.fresh-btn {
+    margin-left: 32px;
+    width: 87px;
+    height: 34px;
+    line-height: 34px;
+    border: solid 1px #f16b0a;
+    border-radius: 3px;
+    color: #f16b0a;
+    font-size: 12px;
+    padding-left: 48px;
+    cursor: pointer;
+    position: relative;
+}
+
+.fresh {
+    display: block;
+    width: 18px;
+    height: 18px;
+    background-position: -36px -25px;
+    position: absolute;
+    top: 8px;
+    left: 9px;
+}

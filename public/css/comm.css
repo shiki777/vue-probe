@@ -213,7 +213,7 @@ body {
     background: #f6f6f6;
 }
 
-.search-area:hover {
+.search-area:hover .search-input {
     border-color: #f16b0a;
     color: #f16b0a;
 }

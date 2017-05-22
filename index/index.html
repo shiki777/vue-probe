@@ -90,6 +90,11 @@
 										<td>{{probe.version}}</td>
 									</tr>							    	
 								</tbody>
+								<tbody v-if="probelist.length == 0">
+									<tr>
+										<td class="no-probe" colspan="6"><i class="sprites probe-alert"></i>当前没有探针，请新增探针</td>
+									</tr>							    	
+								</tbody>								
 							</table>
 							<div id="page" >
 								<page loadfunc="load" loadcb="probeLoadCallback"></page>

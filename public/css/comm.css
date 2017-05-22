@@ -213,6 +213,15 @@ body {
     background: #f6f6f6;
 }
 
+.search-area:hover {
+    border-color: #f16b0a;
+    color: #f16b0a;
+}
+
+.search-area:hover .search-probe-btn {
+    background-position: -54px -1px;
+}
+
 .fresh-btn {
     margin-left: 32px;
     width: 87px;
@@ -415,6 +424,24 @@ body {
 
 .group-edit-btn:hover i {
     background-position: -19px -40px;
+}
+
+.no-probe {
+    text-align: center;
+    color: #a2a2a6;
+}
+
+.no-probe:hover {
+    color: #fff;
+}
+
+.probe-alert {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    background-position: -47px -50px;
+    margin-right: 8px;
 }
 
 /* 探针列表页结束 */

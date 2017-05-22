@@ -2,8 +2,10 @@
 /*2组件通过vuex通信,写代码方便一点,应该通过父子组件通信的*/
 Vue.component('groups', {
     template: '<div class="probe-group" id="probeGroupList">\
-    <div class="btn btn-default group-btn" v-for="g in groups" :gid="g.id" @click="onGroupBtnClick(g.id,g.name)" :class="isCurrentGroup(g.id)">{{g.name}}<div class="group-hover-panel"><div @click="editGroup(g.id,g.name,$event)">编辑</div><div @click="delGroup(g.id,$event)">删除</div></div></div>\
-    <button type="button" title="添加新组" class="btn btn-default glyphicon glyphicon-plus" @click="createGroup()"></button>\
+    <div class="btn btn-default group-btn" v-for="g in groups" :gid="g.id" @click="onGroupBtnClick(g.id,g.name)" @mouseenter="onGroupHover($event)" @mouseleave="onGroupOut($event)" :class="isCurrentGroup(g.id)">{{g.name}}<div class="group-hover-panel"><div class="group-hover-edit" @click="editGroup(g.id,g.name,$event)"><i class="sprites"></i></div><div class="group-hover-del" @click="delGroup(g.id,$event)"><i class="sprites"></i></div></div></div>\
+    <div title="删除组" class="group-del-btn" @click="delGroup()" v-if="id"><i class="sprites"></i></div>\
+    <div title="编辑组" class="group-edit-btn" @click="editGroup()" v-if="id"><i class="sprites"></i></div>\
+    <div title="添加新组" class="group-add-btn" @click="createGroup()">添加<i class="sprites add-group"></i></div>\
     </div>',
     computed : {
         groups : function() {
@@ -12,7 +14,9 @@ Vue.component('groups', {
     },
     data : function() {
         return {
-            currentGroup : 0
+            currentGroup : 0,
+            id : 0,
+            name : ''
         }
     },
     methods: {
@@ -47,6 +51,8 @@ Vue.component('groups', {
              return id == this.currentGroup ? 'activeGroup' : '';
         },
         onGroupBtnClick : function(id,name) {
+            this.id = id;
+            this.name = name;
             this.currentGroup = id;
             /*懒得嵌套promise，直接commit了*/
             this.$store.commit('updateCurrentPage',1);            
@@ -58,13 +64,19 @@ Vue.component('groups', {
                 })
                 .catch(function(e) {console.log(e)})
         },
+        onGroupHover : function(e) {
+            $(e.target).addClass('probe-group-hover');
+        },
+        onGroupOut : function(e) {
+            $(e.target).removeClass('probe-group-hover');
+        },
         createGroup : function() {
             this.$store.dispatch('updateEditGroupid',0);
             this.$store.dispatch('updateGroupPanel', {show : true});
         },
-        delGroup : function(id,e) {
+        delGroup : function() {
             /*阻止冒泡*/
-            e.stopPropagation();
+            id = this.id
             var DEL_URL = snailprobe.BASE_URL +  '/probe-service/org/orgDelete'
             var requestBody = {
                 orgId : id
@@ -75,6 +87,7 @@ Vue.component('groups', {
                     /*0是成功*/
                     if(data.body.status == 0){
                         self.$store.dispatch('delGroup',id);
+                        self.id = 0;
                     } else {
                         alert('删除失败');
                     }
@@ -84,7 +97,8 @@ Vue.component('groups', {
         },
         editGroup : function(id,name,e) {
             /*阻止冒泡*/
-            e.stopPropagation();            
+            id = this.id;
+            name = this.name;
             this.$store.dispatch('updateEditOriginName', name);
             /*hack vuex在值不变的情况下不会发出通知，当初不用消息总线来通知消息而偷懒用vuex很不明智*/
             this.$store.dispatch('updateEditGroupid', -1); 
@@ -384,7 +398,7 @@ Vue.component('group', {
                     if(data.body.status == 0){
                         if(type == 'create'){
                             self.$store.dispatch('addGroup',{id : data.body.orgId,name : self.groupName});
-                            this.$store.dispatch('updateEditOriginName','');
+                            self.$store.dispatch('updateEditOriginName','');
                         }
                         self.$store.dispatch('updateGroupPanel',{step : 1,show : false});
                     } else {

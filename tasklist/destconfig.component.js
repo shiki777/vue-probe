@@ -283,7 +283,11 @@ Vue.component('destconfig', {
         hidePanel : function() {
             this.show = false;
             this.createShow = false;
+            this.setParentVisible(false);
             this.reset();
+        },
+        setParentVisible : function(bool) {
+            this.$emit('dest',bool);
         }
     },
     created : function() {
@@ -292,6 +296,7 @@ Vue.component('destconfig', {
         var self = this;  
         snailtask.messageBus.$on('showDest', function(bool) {
             self.show = true;
+            self.setParentVisible(true);
         });         
     }
 })

@@ -81,7 +81,7 @@ body{font-family:"Helvetica Neue","Luxi Sans","DejaVu Sans",Tahoma,"Hiragino San
 .loadingtr{text-align:center;display:none;}
 .loadingtr td{height:300px;vertical-align:middle;line-height:300px!important;}
 #tasklist{position:relative;height:100%;}
-.creatTask{position:absolute;top:0;left:0;right:0;background-color:#fff;height:100%;width:100%;z-index:8;}
+.creatTask{position:absolute;top:0;left:0;right:0;background: #f6f6f6;height:100%;width:100%;z-index:8;}
 .creattaskwrap{width:900px;margin:20px auto;}
 #page,#hispage{height:40px;display:table;margin:10px auto 0;}
 .fl{float:left;}
@@ -164,6 +164,7 @@ th.active .arrow{opacity:1;}
 
 body {
     background: #f6f6f6;
+    font-family: "Microsoft YaHei","Helvetica Neue","Luxi Sans"
 }
 
 /* 探针列表页 */
@@ -478,7 +479,7 @@ table tr:hover td {
 }
 
 .dest-btn {
-    width: 93px;
+    width: 110px;
     height: 36px;
     line-height: 34px;
     border : solid 1px #f16b0a;
@@ -487,5 +488,29 @@ table tr:hover td {
     color: #fff;
     border-radius: 5px;
     margin-left: 33px;
+}
+
+.create-btn:hover,
+.dest-btn:hover {
+    background: #e9a583;
+}
+
+.task-panel {
+    z-index: 1111;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    height: 100%;
+    width: 100%;
+    background: #f6f6f6;
+}
+
+.close {
+    font-size: 40px;
+    color: red;
+    opacity: 1;
+    font-weight: bold;
 }
 /* 任务列表结束 */

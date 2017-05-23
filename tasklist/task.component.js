@@ -1,5 +1,5 @@
 Vue.component('taskpanel', {
-    template: '                            <div><div class="creatTask" :style="showStyle">\
+    template: '                            <div class="task-panel" v-show="showPanel == true"><div class="creatTask" :style="showStyle">\
     <h4 class="channel-title">{{title}}</h4>\
     <span aria-hidden="true" class="close" @click="hidePanel()">×</span>\
     <div class="creattaskwrap">\
@@ -120,12 +120,13 @@ Vue.component('taskpanel', {
     </div>\
     </div>\
     </div>\
-    <destconfig></destconfig>\
+    <destconfig @dest="dest"></destconfig>\
     </div>',
     data: function() {
         return {
             submitType : 'new',
             show: false,
+            showPanel : false, /*整体容器（包括任务和主机标识配置2个容器）的显示*/
             step: 1,
             destList: [],
             destId: 'empty',/*接收主机标识id*/
@@ -235,6 +236,7 @@ Vue.component('taskpanel', {
     methods: {
         setVisible: function(bool) {
             this.show = bool;
+            this.showPanel = bool;
         },
         hidePanel : function() {
             this.setVisible(false);
@@ -596,6 +598,9 @@ Vue.component('taskpanel', {
                 status : item.task.status,
                 id : item.task.taskId
             };
+        },
+        dest : function(bool) {
+            this.showPanel = bool;
         }
     },
     created: function() {
@@ -603,6 +608,9 @@ Vue.component('taskpanel', {
         snailtask.messageBus.$on('showPanel', function(bool) {
             self.setVisible(bool);
         });
+        snailtask.messageBus.$on('show', function(bool) {
+            self.setVisible(bool);
+        });        
         snailtask.messageBus.$on('editTask', function(task) {
             self.setVisible(true);
             self.loadTaskDetail(task.id);

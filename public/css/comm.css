@@ -217,6 +217,9 @@ body {
     border-color: #f16b0a;
     color: #f16b0a;
 }
+.search-area:hover input::-webkit-input-placeholder {
+    color: #f16b0a !important;
+}
 
 .search-area:hover .search-probe-btn {
     background-position: -54px -1px;
@@ -462,5 +465,27 @@ table tr:hover td {
 
 /* 探针列表页结束 */
 /* 任务列表开始 */
+.create-btn {
+    width: 93px;
+    height: 36px;
+    line-height: 34px;
+    border : solid 1px #f16b0a;
+    background: #f79260;
+    text-align: center;
+    color: #fff;
+    border-radius: 5px;
+    margin-left: 36px;
+}
 
+.dest-btn {
+    width: 93px;
+    height: 36px;
+    line-height: 34px;
+    border : solid 1px #f16b0a;
+    background: #f79260;
+    text-align: center;
+    color: #fff;
+    border-radius: 5px;
+    margin-left: 33px;
+}
 /* 任务列表结束 */

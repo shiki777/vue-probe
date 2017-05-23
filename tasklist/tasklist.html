@@ -86,15 +86,13 @@
 							</ul><br>
 
 							<div class="input-group search-area">
-								<input type="text" class="form-control" placeholder="搜索任务..." id="searchQuery" v-model="taskName">						        
-								<span class="input-group-btn">
-									<button class="btn btn-default" type="button" id="J_searchBtn" data-searchkey="" @click="onSerchClick()">查找</button>
-								</span>
+								<input type="text" class="form-control search-input" placeholder="搜索任务..." id="searchQuery" v-model="taskName">
+								<div class="sprites search-probe-btn" @click="onSerchClick()"></div>
 							</div><!-- /input-group -->
 
 							<div class="newtaskbtngroup btn-group" role="group">
-								<button type="button" class="btn btn-primary" id="J_newCreatTask" @click="onCreateTaskClick()">新建任务</button>
-								<button type="button" class="btn btn-primary" @click="onDestConfigClick()">主机标识配置</button>
+								<button type="button" class="create-btn" id="J_newCreatTask" @click="onCreateTaskClick()">新建任务</button>
+								<button type="button" class="dest-btn" @click="onDestConfigClick()">主机标识配置</button>
 							</div>	
 							
 							

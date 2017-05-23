@@ -26,15 +26,18 @@ Vue.component('probelist', {
             </div>\
         </div>\
         <div class="group-panel">\
-            <h3>组选择</h3>\
-            <div class="btn-group probe-group" id="probeGroupList">\
-            <div class="btn btn-default group-btn" v-for="g in groups"><div class="g-checkbox" @click="ongroupBoxClick(g.id)" :value="g.id" :name="g.id" :id="g.id" :class="isGroupBoxChecked(g.id)"><i class="sprites"></i></div><span>{{g.name}}</span></div>\
+            <div class="selected-probe-wrap">\
+                <h3>组选择：</h3>\
+                <div class="btn btn-default group-btn" v-for="g in groups"><div class="g-checkbox" @click="ongroupBoxClick(g.id)" :value="g.id" :name="g.id" :id="g.id" :class="isGroupBoxChecked(g.id)"><i class="sprites"></i></div><span class="group-txt">{{g.name}}</span></div>\
+                <div class="clear"></div>\
             </div>\
         </div>\
         <div class="select-panel">\
-        <h3>已选择探针</h3><button class="btn btn-primary" @click="lastStep($event)">上一步</button><button class="btn btn-primary" @click="probeSubmit($event)">提交</button>\
-        <div class="selected-wrap">\
+        <div class="selected-probe-wrap">\
+            <h3>已选探针：</h3>\
             <div class="selected-probe" v-for="p in selectedShowProbes">{{p.hostName}}</div>\
+            <div class="selected-probe-btn-wrap"><button class="btn btn-primary last-btn" @click="lastStep($event)">上一步</button><button class="btn btn-primary submit-btn" @click="probeSubmit($event)">提交</button></div>\
+            <div class="clear"></div>\
         </div>\
         </div>\
     </div>',
@@ -50,7 +53,6 @@ Vue.component('probelist', {
             index: 0,
             size: 5,
             groups: [],
-            tempGroups : {},
             selectedProbes : [], /*选中的探针组,此数据没有和选中组排重*/
             selectedGroups : [] /*选中的组*/
         }
@@ -79,7 +81,12 @@ Vue.component('probelist', {
         },
         probeSubmit : function(e) {
             e.preventDefault();
+            if(this.selectedShowProbes.length == 0){
+                alert('未选择探针！');
+                return;
+            }
             this.$emit('submit',{groups : this.selectedGroups,probes : this.selectedShowProbes});
+            this.reset();
         },
         /*后端接口老变，专门格式化*/
         parseProbes : function() {
@@ -239,6 +246,10 @@ Vue.component('probelist', {
                     self.selectedProbes.push({hostName : probe.hostName, orgId : probe.orgId});
                 }
             })
+        },
+        reset : function() {
+            this.selectedProbes = [];
+            this.selectedGroups = [];
         }
     },
     created: function() {

@@ -1,4 +1,5 @@
 body{font-family:"Helvetica Neue","Luxi Sans","DejaVu Sans",Tahoma,"Hiragino Sans GB",STHeiti,"Microsoft YaHei";}
+.clear {clear: both;}
 .vFramework-topbar{background:#1f232c;border:none;height:62px;margin-bottom: 0;}
 .vFramework-topbar .container-fluid{padding-left:25px;}
 .vFramework-topbar .navbar-brand{color:#f16b0a;font-size:24px;font-weight:bold;padding-right:10px;}
@@ -612,4 +613,72 @@ table tr:hover td {
 .group-btn:hover .g-checked i {
     background-position: -1px -33px;
 }
+
+.selected-probe-wrap {
+    background: #ffffff;
+    width: 100%;
+    padding: 10px 0px 40px 114px;
+    border : solid 1px #e4ebf1;
+    position: relative;
+    min-height: 93px;
+}
+
+.selected-probe-wrap h3 {
+    font-size: 14px;
+    color : #f16b0a;
+    position: absolute;
+    left: 14px;
+    top: 18px;
+    margin: 0;
+    padding: 0;
+}
+
+.selected-probe {
+    min-width: 129px;
+    height: 35px;
+    line-height: 35px;
+    background: #f6f6f6;
+    border-radius: 5px;
+    text-align: center;
+    color : #b5b5ba;
+    margin-right: 14px;
+    margin-bottom: 6px;
+    float: left;
+}
+
+.selected-probe-btn-wrap {
+    position: absolute;
+    bottom: 5px;
+    right: 83px;
+}
+
+.submit-btn {
+    width: 93px;
+    height: 36px;
+    line-height: 34px;
+    border: solid 1px #f16b0a;
+    background: #f79260;
+    color: #fff;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    margin-left: 10px;
+}
+
+.last-btn {
+    width: 93px;
+    height: 36px;
+    line-height: 34px;
+    border: solid 1px #f16b0a;
+    background: #f79260;
+    color: #fff;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.selected-probe-wrap {
+    margin-bottom: 15px;
+}
+
 /* 任务列表结束 */

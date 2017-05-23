@@ -299,18 +299,18 @@ body {
     background-position: -22px -65px;    
 }
 
-.table-prolist td, 
-.table-prolist th {
+table td, 
+table th {
     border: 0 !important;
 }
 
-.table-prolist thead {
+table thead {
     border-bottom: solid 1px #e5e5eb;
     background: #fcfcfc;
 }
 
-.table-prolist thead th {
-   height: 45px;
+table thead th {
+   height: 45px !important;
    padding: 0 13px !important;
    line-height: 45px !important;
 }
@@ -319,15 +319,31 @@ body {
     border: solid 1px #e5e5eb;
 }
 
-#tableDada td {
-    background: #fff;
-    height: 78px;
-    line-height: 78px;
-    padding: 0 0 0 13px;
+table {
+    font-family: 'Microsoft YaHei';
 }
 
-#tableDada tr:hover td {
-    background: #f79260;
+table td {
+    background: #fff !important;
+    height: 78px !important;
+    line-height: 78px !important;
+    padding: 0 0 0 13px !important;
+    cursor: pointer;
+    color: #a2a2a6;
+}
+
+table th {
+    color: #6d6d6d !important;
+    font-size: 12px;
+}
+
+table tr:hover {
+    border : solid 1px #f16b0a !important;
+}
+
+table tr:hover td {
+    background: #f79260 !important;
+    color: #ffffff !important;
 }
 
 .group-hover-edit {
@@ -445,3 +461,6 @@ body {
 }
 
 /* 探针列表页结束 */
+/* 任务列表开始 */
+
+/* 任务列表结束 */

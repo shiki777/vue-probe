@@ -530,4 +530,86 @@ table tr:hover td {
 .task-probe-search {
     float: none;
 }
+
+.p-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    background: #e3e3e3;
+    border : solid 1px #e3e3e3;
+    vertical-align: middle;
+    position: relative;
+    top: 10px;
+    left: 6px;
+}
+
+.p-checkbox i {
+    width: 12px;
+    height: 10px;
+    background-position: -1px -21px;
+    display: none;
+    position: absolute;
+    left: 3px;
+    top: 4px;
+}
+
+.p-checked {
+    border-color: #f16b0a;
+    background-color: #f79260;
+}
+
+.p-checked i {
+    display: block;
+}
+
+.table-task-prolist tr:hover .p-checked {
+    background-color: #f5f5f5;
+}
+
+.table-task-prolist tr:hover .p-checked i {
+    background-position: -1px -33px;
+}
+
+.g-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    background: #e3e3e3;
+    border : solid 1px #e3e3e3;
+    vertical-align: middle;
+    display: inline-block;
+    margin-right: 5px;
+    position: relative;
+}
+
+.g-checkbox i {
+    width: 12px;
+    height: 10px;
+    background-position: -1px -21px;
+    display: none;
+    position: absolute;
+    left: 3px;
+    top: 4px;
+}
+
+.group-txt {
+    vertical-align: middle;
+}
+
+.g-checked {
+    border-color: #f16b0a;
+    background-color: #f79260;
+}
+
+.g-checked i {
+    display: block;
+}
+
+.group-btn:hover .g-checked {
+    background-color: #f5f5f5;
+}
+
+.group-btn:hover .g-checked i {
+    background-position: -1px -33px;
+}
 /* 任务列表结束 */

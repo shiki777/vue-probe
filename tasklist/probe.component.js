@@ -9,7 +9,7 @@ Vue.component('probelist', {
             </thead>\
             <tbody>\
             <tr v-for="(probe,index) in list">\
-            <td><input type="checkbox" @click="onprobeBoxClick(probe.name)" :value="probe.name" :name="probe.name" :id="probe.name" :checked="isBoxChecked(probe.name)"/></td>\
+            <td><div class="p-checkbox" @click="onprobeBoxClick(probe.name)" :value="probe.name" :name="probe.name" :id="probe.name" :class="isBoxChecked(probe.name)"><i class="sprites"></i></div></td>\
             <td>{{index + 1}}</td>\
             <td>{{probe.name}}</td>\
             <td>{{probe.time}}</td>\
@@ -28,7 +28,7 @@ Vue.component('probelist', {
         <div class="group-panel">\
             <h3>组选择</h3>\
             <div class="btn-group probe-group" id="probeGroupList">\
-            <div class="btn btn-default group-btn" v-for="g in groups"><input type="checkbox" @click="ongroupBoxClick(g.id)" :value="g.id" :name="g.id" :id="g.id" :checked="isGroupBoxChecked(g.id)"/>{{g.name}}</div>\
+            <div class="btn btn-default group-btn" v-for="g in groups"><div class="g-checkbox" @click="ongroupBoxClick(g.id)" :value="g.id" :name="g.id" :id="g.id" :class="isGroupBoxChecked(g.id)"><i class="sprites"></i></div><span>{{g.name}}</span></div>\
             </div>\
         </div>\
         <div class="select-panel">\
@@ -125,7 +125,7 @@ Vue.component('probelist', {
             this.load();
         },
         isBoxChecked : function(name) {
-            return this.isProbeSelected(name);
+            return this.isProbeSelected(name) ? 'p-checked' : '';
         },
         onprobeBoxClick : function(name) {
             if(this.isProbeSelected(name)){
@@ -170,7 +170,7 @@ Vue.component('probelist', {
         },
         /*组是否被选择*/
         isGroupBoxChecked : function(id) {
-            return this.isGroupSelected(id);
+            return this.isGroupSelected(id) ? 'g-checked' : '';
         },
         ongroupBoxClick : function(id) {
             if(this.isGroupSelected(id)){

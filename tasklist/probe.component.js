@@ -2,8 +2,8 @@ Vue.component('probelist', {
     template: '<div>\
         <div class="probe-panel">\
             <h3>探针选择</h3>\
-            <div class="input-group search-area"><input type="text" placeholder="搜索探针..." id="searchQuery" class="form-control" v-model="probeName"> <span class="input-group-btn"><button type="button" id="J_searchBtn" data-searchkey="" class="btn btn-default" @click="onSearchClick()">查找</button></span></div>\
-            <table class="table table-striped table-bordered table-hover table-prolist" id="tableDada">\
+            <div class="input-group search-area task-probe-search"><input type="text" placeholder="搜索探针..." id="searchQuery" class="form-control search-input" v-model="probeName"> <div class="sprites search-probe-btn" @click="onSearchClick()"></div></div>\
+            <table class="table table-striped table-bordered table-hover table-task-prolist" id="tableDada">\
             <thead>\
             <tr><th></th><th>编号</th><th>探针名称</th><th>最近运行时间</th><th>IP地址</th><th>地区</th><th>版本</th></tr>\
             </thead>\

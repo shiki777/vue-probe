@@ -513,4 +513,21 @@ table tr:hover td {
     opacity: 1;
     font-weight: bold;
 }
+
+.table-task-prolist {
+    margin-top: 20px;
+}
+
+.table-task-prolist tr {
+    border: solid 1px #e5e5eb;
+}
+
+.table-task-prolist td {
+    height: 40px !important;
+    line-height: 40px !important;
+}
+
+.task-probe-search {
+    float: none;
+}
 /* 任务列表结束 */

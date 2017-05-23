@@ -125,9 +125,9 @@ Vue.component('taskpanel', {
     data: function() {
         return {
             submitType : 'new',
-            show: false,
-            showPanel : false, /*整体容器（包括任务和主机标识配置2个容器）的显示*/
-            step: 1,
+            show: true, /*任务容器是否显示*/
+            showPanel : true, /*整体容器（包括任务和主机标识配置2个容器）的显示*/
+            step: 2,
             destList: [],
             destId: 'empty',/*接收主机标识id*/
             taskRuntype: '3',/*任务运行类型*/

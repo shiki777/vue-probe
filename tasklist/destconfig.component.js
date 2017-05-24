@@ -221,7 +221,11 @@ Vue.component('destconfig', {
                     if(data.body.status == 0){
                         self.removeDestFromList(id);
                     } else {
-                        alert('删除失败，请检查网络');
+                        if(data.body.status == -2){
+                            alert('该组与任务关联，无法删除');
+                        } else {
+                            alert('删除失败，请检查网络');
+                        }
                     }
                 })
                 .catch(function() {

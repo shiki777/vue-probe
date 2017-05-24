@@ -89,7 +89,11 @@ Vue.component('groups', {
                         self.$store.dispatch('delGroup',id);
                         self.id = 0;
                     } else {
-                        alert('删除失败');
+                        if(data.body.status == -2){
+                            alert('该组与任务关联，无法删除');
+                        } else {
+                          alert('删除失败');  
+                        }
                     }
                 })
                 .catch(function(e) {console.log(e)});

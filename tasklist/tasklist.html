@@ -126,6 +126,9 @@
 											</div>	
 										</td>
 									</tr>
+									<tr v-if="taskList.length == 0">
+										<td class="no-probe" colspan="8"><i class="sprites probe-alert"></i>当前没有任务，请新增任务</td>
+									</tr>										
 								</tbody>
 							</table>
 							<div class="clearfix"><br></div>

@@ -21,7 +21,7 @@ Vue.component('probelist', {
             </table>\
             <div id="page">\
             <ul class="pagingUl">\
-            <li v-for="n in pageNum"><a  href="javascript:" :class="isCurrent(n)" @click="onPageClick(n)">{{n}}</a></li>\
+            <li v-for="n in indexArr"><a  href="javascript:" :class="isCurrent(n)" @click="onPageClick(n)">{{n}}</a></li>\
             </ul>\
             </div>\
         </div>\
@@ -51,6 +51,7 @@ Vue.component('probelist', {
             CREATE_URL : '/probe-service/task/taskNew',
             probeName: '',
             index: 0,
+            MAX_PAGE : 10,
             size: 5,
             groups: [],
             selectedProbes : [], /*选中的探针组,此数据没有和选中组排重*/
@@ -72,7 +73,39 @@ Vue.component('probelist', {
                 }
             }
             return res;
-        }
+        },
+        /*当前页标前面下标数*/
+        currentPrevNum : function() {
+            if(this.MAX_PAGE % 2 == 0){
+                return this.MAX_PAGE / 2 - 1;
+            } else {
+                return Math.floor(this.MAX_PAGE);
+            }
+        },
+        /*下标数组*/
+        indexArr : function() {
+            var currentPage = this.index + 1;
+            var indexArr = [];
+            var bodyStart = (currentPage - this.currentPrevNum) > 0 ? currentPage - this.currentPrevNum : 1;
+            var bodyEnd = (bodyStart + this.MAX_PAGE - 1) >= this.pageNum ? this.pageNum : bodyStart + this.MAX_PAGE - 1;
+            for(var i = bodyStart; i <= bodyEnd; i++){
+                indexArr.push(i);
+            }
+            if(bodyStart > 1){
+                indexArr.splice(0,0,1);
+            }
+            if(bodyStart > 2){
+                indexArr.splice(1,0,'...');
+            }
+            if(bodyEnd < this.pageNum){
+                indexArr.push(this.pageNum);
+            }
+            if(bodyEnd < this.pageNum - 1){
+                indexArr.splice(indexArr.length - 1,0,'...');
+            }
+            return indexArr;
+        }        
+
     },
     methods: {
         lastStep : function(e) {
@@ -123,6 +156,7 @@ Vue.component('probelist', {
             return n == this.index + 1 ? 'activP' : '';
         },
         onPageClick: function(n) {
+            if(isNaN(parseInt(n,10))) {return;}
             var self = this;
             this.index = n - 1;
             this.load();

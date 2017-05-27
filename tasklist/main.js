@@ -84,6 +84,9 @@
                     if(status == 0){
                         return '未运行';
                     }
+                    if(status == 2){
+                        return '任务结束';
+                    }
                 },
                 typeMsg : function(type) {
                     if(type == 1){

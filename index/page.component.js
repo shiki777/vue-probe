@@ -61,7 +61,6 @@ Vue.component('page', {
             return n == this.currentPage ? 'activP' : '';
         },
         onPageClick : function(n) {
-            console.log(typeof parseInt(n,10))
             if(isNaN(parseInt(n,10))) {return;}
             var self = this;
             this.$store.dispatch('updateCurrentPage',n)

@@ -54,7 +54,7 @@ Vue.component('probelist', {
             MAX_PAGE : 10,
             size: 5,
             groups: [],
-            selectedProbes : [], /*选中的探针组,此数据没有和选中组排重*/
+            selectedProbes : [], /*选中的探针列表,此数据没有和选中组排重*/
             selectedGroups : [] /*选中的组*/
         }
     },
